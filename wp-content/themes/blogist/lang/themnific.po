@@ -1,0 +1,596 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:64
+msgid "<a href=\"http://www.gravatar.com/\">Gravatar</a> E-mail:"
+msgstr ""
+
+#. Text in function
+#: blogist/comments.php:28
+msgid "<span class=\"meta-nav\">&laquo;</span> Older Comments"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-homepage-video.php:1
+msgid "A video widget."
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-300.php:61
+msgid "Ad Code:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:89
+msgid "All"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-404-content.php:19
+msgid "All Blog Posts"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-300.php:74
+msgid "Alt text:"
+msgstr ""
+
+#. Text in echo
+#: blogist/date.php:23
+#: blogist/date.php:27
+#: blogist/date.php:31
+msgid "Archive for"
+msgstr ""
+
+#. Text in echo
+#: blogist/tag.php:14
+#: blogist/date.php:15
+msgid "Archive for the"
+msgstr ""
+
+#. Text in echo
+#: blogist/date.php:35
+msgid "Author Archive"
+msgstr ""
+
+#. Text in echo
+#: blogist/author.php:35
+msgid "Author Posts"
+msgstr ""
+
+#. Text in echo
+#: blogist/author.php:21
+msgid "Author: "
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:60
+msgid "Bio:"
+msgstr ""
+
+#. Text in echo
+#: blogist/author.php:29
+msgid "Bio: "
+msgstr ""
+
+#. Text in echo
+#: blogist/date.php:39
+msgid "Blog Archives"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-404-content.php:11
+msgid "Categories"
+msgstr ""
+
+#. Text in echo
+#: blogist/tag.php:14
+#: blogist/category.php:13
+#: blogist/date.php:15
+msgid "Category"
+msgstr ""
+
+#. Text in function
+#: blogist/functions.php:460
+msgid "Comments (%)"
+msgstr ""
+
+#. Text in function
+#: blogist/functions.php:460
+msgid "Comments (0)"
+msgstr ""
+
+#. Text in function
+#: blogist/functions.php:460
+msgid "Comments (1)"
+msgstr ""
+
+#. Text in echo
+#: blogist/comments.php:40
+msgid "Comments are closed."
+msgstr ""
+
+#. Text in function
+#: blogist/functions/js/shortcode-generator/dialog.php:51
+msgid "Customize the Shortcode"
+msgstr ""
+
+#. Text in echo
+#: blogist/footer.php:37
+msgid "Designed by"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "E-mail has not been setup properly. Please add your contact e-mail!"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Email"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-ads-125.php:41
+msgid "Example"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:54
+msgid "Flickr ID (<a href=\"http://www.idgettr.com\">idGettr</a>):"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Follow"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/js/shortcode-generator/dialog.php:77
+msgid "Framework does not support shortcodes."
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "From: "
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:72
+msgid "Gravatar Alignment:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:68
+msgid "Gravatar Size:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:69
+msgid "Group"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Hide the Content"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:90
+msgid "Home only"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "If you want to submit this form, do not enter anything in this field"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:101
+msgid "Image 2 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:115
+msgid "Image 3 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:129
+msgid "Image 4 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:88
+msgid "Image URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-300.php:66
+msgid "Image Url:"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-tabs.php:5
+#: blogist/functions/widgets/widget-flickr.php:75
+msgid "Latest"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:74
+msgid "Left"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-300.php:70
+msgid "Link URL:"
+msgstr ""
+
+#. Text in echo
+#: blogist/header.php:35
+msgid "MENU"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:83
+msgid "Medium"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Message"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Message via the contact form"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "My %s Profile"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Name"
+msgstr ""
+
+#. Text in function
+#: blogist/comments.php:29
+msgid "Newer Comments <span class=\"meta-nav\">&raquo;</span>"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/mag-nextprev.php:9
+msgid "Next Post"
+msgstr ""
+
+#. Text in echo
+#: blogist/404.php:7
+msgid "Nothing found here"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-comments.php:75
+msgid "Number of comments"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:58
+msgid "Number:"
+msgstr ""
+
+#. Text in function
+#: blogist/header.php:16
+msgid "Page %s"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-404-content.php:3
+msgid "Pages"
+msgstr ""
+
+#. Text in function
+#: blogist/single-s-right.php:58
+#: blogist/page.php:14
+msgid "Pages:"
+msgstr ""
+
+#. Text in echo
+#: blogist/search.php:37
+#: blogist/404.php:9
+msgid "Perhaps You will find something interesting form these lists..."
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:22
+msgid "Photos on <span class=\"flickr\">flick<span>r</span></span>"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Please enter your email address (and please make sure it\\'s valid)"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Please enter your message"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Please enter your name"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-tabs.php:6
+msgid "Popular"
+msgstr ""
+
+#. Text in echo
+#: blogist/tag.php:18
+#: blogist/category.php:17
+#: blogist/date.php:19
+msgid "Posts Tagged"
+msgstr ""
+
+#. Text in echo
+#: blogist/footer.php:37
+msgid "Powered by"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/js/shortcode-generator/dialog.php:60
+msgid "Preview"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/mag-nextprev.php:4
+msgid "Previous post"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-tabs.php:7
+#: blogist/functions/widgets/widget-flickr.php:76
+msgid "Random"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Read Less"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+#: blogist/includes/post-types/medpost.php:50
+#: blogist/functions.php:470
+msgid "Read More"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:79
+msgid "Read More Text (optional):"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:83
+msgid "Read More URL (optional):"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/mag-relatedposts.php:1
+msgid "Related Posts"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Reply-To: "
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:75
+msgid "Right"
+msgstr ""
+
+#. Text in echo
+#: blogist/search.php:11
+msgid "Search Results for"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-searchform.php:2
+msgid "Search website..."
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Send a copy of this email to yourself"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Show the Content"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:91
+msgid "Single only"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:80
+msgid "Size:"
+msgstr ""
+
+#. Text in echo
+#: blogist/single-s-right.php:103
+#: blogist/page.php:30
+msgid "Sorry, no posts matched your criteria"
+msgstr ""
+
+#. Text in echo
+#: blogist/search.php:35
+msgid "Sorry, no posts matched your criteria."
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:73
+msgid "Sorting:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:82
+msgid "Square"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Submit"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Subscribe to our RSS feed"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/mag-rating.php:
+msgid "Summary: "
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-tabs.php:8
+msgid "Tags"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:105
+msgid "Target 2 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:119
+msgid "Target 3 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:133
+msgid "Target 4 URL"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:92
+msgid "Target URL"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-ads-125.php:1
+msgid "Themnific - Ads 125px 4x"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-ads-300.php:1
+msgid "Themnific - Ads Widget 300px/Free"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-blogauthor.php:1
+msgid "Themnific - Blog Author Info"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-comments.php:1
+msgid "Themnific - Comments"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-flickr.php:1
+msgid "Themnific - Flickr"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-social.php:1
+msgid "Themnific - Social Networks"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/widgets/widget-homepage-video.php:1
+msgid "Themnific - Video"
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "There were one or more errors while submitting the form."
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:84
+msgid "Thumbnail"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-300.php:57
+msgid "Title (optional):"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-ads-125.php:79
+#: blogist/functions/widgets/widget-social.php:36
+#: blogist/functions/widgets/widget-blogauthor.php:56
+#: blogist/functions/widgets/widget-comments.php:70
+msgid "Title:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:66
+msgid "Type:"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-flickr.php:68
+msgid "User"
+msgstr ""
+
+#. Text in function
+#: blogist/functions.php:1
+msgid "Views"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions/widgets/widget-blogauthor.php:87
+msgid "Visible Pages:"
+msgstr ""
+
+#. Text in echo
+#: blogist/author.php:27
+msgid "Website: "
+msgstr ""
+
+#. Text in function
+#: blogist/functions/admin-shortcodes.php:1
+msgid "Your email was successfully sent."
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/post-types/link.php:17
+msgid "[Link Post]"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/mag-authorinfo.php:2
+msgid "about the author"
+msgstr ""
+
+#. Text in echo
+#: blogist/functions.php:457
+msgid "by"
+msgstr ""
+
+#. Text in echo
+#: blogist/includes/uni-comments.php:31
+msgid "says:"
+msgstr ""
