@@ -5,7 +5,7 @@
 	</ul>
 	
 
-
+<?php dynamic_sidebar( 'sidebar-1' ); ?>
 
 <a href="http://sv.888poker.com/?sr=743760&anid=fahlstadse"><img src="wp-content/uploads/888_poker_Fahlstad.png" alt="Online poker hos 888 poker"></a>
 
