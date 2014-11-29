@@ -34,11 +34,11 @@ jQuery(document).ready(function($){
 				required: true
 			}, 
 			themes_zip: { 
-				required: true, 
+				required: true
 			}, 
 			themes_version: { 
-				required: true,
-			},
+				required: true
+			}
 		},
 	
 		errorPlacement: function(error, element) {

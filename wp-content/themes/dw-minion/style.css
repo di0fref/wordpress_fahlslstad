@@ -17,3 +17,7 @@ DW Minion WordPress theme is licensed under the GPL v3.0
 .sticky {}
 .gallery-caption {}
 .bypostauthor {}
+
+.entry-content a{
+	color: #7cc576;
+}

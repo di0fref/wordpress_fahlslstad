@@ -1791,7 +1791,7 @@ textarea {
 @media (min-width: 768px) {
   .site-actions {
     /*position: absolute;*/
-  
+
     top: -1px;
     left: 0;
   }
@@ -4680,8 +4680,8 @@ iframe[id^="oauth2relay"] {
 }
 @media (min-width: 768px) {
   .content-list .hentry {
-    padding-top: 70px;
-    margin-bottom: 80px;
+	  padding-top: 35px;
+	  margin-bottom: 40px;
   }
 }
 @media (max-width: 767px) {
