@@ -17,8 +17,8 @@ class fref_Themes{
 	
 	public function init()
 	{
-		wp_register_script("front_script", plugins_url('/js/front.js', __FILE__));
-		wp_enqueue_script("front_script");
+		//wp_register_script("front_script", plugins_url('/js/front.js', __FILE__));
+		//wp_enqueue_script("front_script");
 	}
 	
 
@@ -43,15 +43,15 @@ class fref_Themes{
 			$full = FULL_URL.$theme->thumb;
 			$th = "<img src='$full' width='125px' />";
 			$this->output .= "
-				<table width='100%' border=1 cellspacing=0 cellpadding=0>
+				<table width='100%' border=0 cellspacing=0 cellpadding=0>
 					<tr>
 						<td class='theme_thumb' valign='top'><div class='shadow'><a href='$full'>$thumb</a></div></td>
 						<td class='theme_name' valign='top'><span>$theme->name</span><br /><i><small>Updated: ".date("F jS, Y", strtotime($theme->date_updated))."<br>Version: $theme->version</small></i></td>
 						<td class='theme_desc' valign='top'>$theme->description</td>
 						<td valign='top'><a class='download_link' id='$theme->id' href='$download_link'>Download</a>";
 						//$this->output .=" | <a href='#'>Demo</a>(Soon)</td>";
-						$this->output .= " | <a href='http://demo.fahlstad.se?wptheme=$theme->name'>Demo</a>";
-					$this->output .= "</tr></table><hr />";
+						//$this->output .= " | <a href='http://demo.fahlstad.se?wptheme=$theme->name'>Demo</a>";
+					$this->output .= "</tr></table>";
 	
 		}
 		$this->output .= "</div>";

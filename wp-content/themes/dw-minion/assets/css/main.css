@@ -2129,7 +2129,7 @@ h6 {
 .page-header {
   padding-bottom: 20px;
   margin: 0 0 30px;
-  border-bottom: 5px solid #333333;
+  border-bottom: 2px solid #333333;
 }
 .page-header .page-title {
   margin: 0;
@@ -4495,7 +4495,18 @@ input[type="submit"].btn-small {
   margin-top: 5px;
   padding-bottom: 5px;
 }
-.ads-125 {
+.ads-300 img {
+  border: 1px solid #e5e5e5;
+  width: auto;
+  height: 250px;
+  text-align: center;
+  line-height: 125px;
+}
+.ads-300 li {
+  border: 9px solid #f5f5f5;
+  margin: 5px;
+}
+.ads-125, .ads-300 {
   margin: 0 -5px;
   list-style: none;
   overflow: hidden;
@@ -4598,8 +4609,8 @@ input[type="submit"].btn-small {
     margin-bottom: 40px;
   }
   #secondary .widget {
-    margin-top: 35px;
-    padding-top: 35px;
+    margin-top: 10px;
+    padding-top: 10px;
   }
 }
 @media (min-width: 800px) and (max-width: 979px) {
