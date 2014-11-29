@@ -1847,6 +1847,9 @@ textarea {
   .primary-inner {
     margin-right: 340px;
   }
+	.primary-inner-full {
+		margin-right: 0;
+	}
   .page-content {
     margin-bottom: 40px;
   }

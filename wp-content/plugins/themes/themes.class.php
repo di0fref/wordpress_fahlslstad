@@ -41,11 +41,10 @@ class fref_Themes{
 			
 			$thumb = "<img src='".IMAGE_URL."$theme->thumb&amp;height=".get_option("themes_options_thumb_height")."&amp;width=".get_option("themes_options_thumb_width")."' alt='image' />";
 			$full = FULL_URL.$theme->thumb;
-			$th = "<img src='$full' width='125px' />";
 			$this->output .= "
 				<table width='100%' border=0 cellspacing=0 cellpadding=0>
 					<tr>
-						<td class='theme_thumb' valign='top'><div class='shadow'><a href='$full'>$thumb</a></div></td>
+						<td class='theme_thumb' valign='top'><div class='shadow'>$thumb</div></td>
 						<td class='theme_name' valign='top'><span>$theme->name</span><br /><i><small>Updated: ".date("F jS, Y", strtotime($theme->date_updated))."<br>Version: $theme->version</small></i></td>
 						<td class='theme_desc' valign='top'>$theme->description <p><br><a class='download_link' id='$theme->id' href='$download_link'>Download</a></p></td>
 						";
@@ -108,6 +107,7 @@ class fref_Themes{
 				-moz-box-shadow: 2px 2px 5px #bbb;
 				-webkit-box-shadow: 2px 2px 5px #bbb;
 				box-shadow: 2px 2px 5px #bbb;
+				width: <?php echo get_option("themes_options_thumb_width")+10; ?>px;
 				/* For IE 8 */
 				-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#999999')";
 				/* For IE 5.5 - 7 */
