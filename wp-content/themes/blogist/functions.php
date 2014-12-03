@@ -462,4 +462,4 @@ function tmnf_meta_full() { ?>
 <?php }
 
 ?>
-<?php include('images/social.png'); ?>
+<?php //include('images/social.png'); ?>
