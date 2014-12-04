@@ -618,6 +618,7 @@ class wpforum{
 						</td>
 					</tr>
 				</table>";
+
 		
 		
 		$out .= "<div class='wpf'>

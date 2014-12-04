@@ -1,12 +1,23 @@
 <?php
 
-
 class AppBase
 {
 	const CATEGORIES = "wpforum_categories";
 	const FORUMS = "wpforum_forums";
 	const THREADS = "wpforum_threads";
 	const POSTS = "wpforum_posts";
+
+	const FORUM_ACTION = "viewforum";
+	const THREAD_ACTION = "viewthread";
+
+	const RECORD = "record";
+	const APP_ACTION = "action";
+
+	const THREAD_PAGE_COUNT = 20;
+	const POST_PAGE_COUNT = 20;
+	const FORUM_PAGE = "page";
+
+	static $border = 0;
 
 	static $categories_table;
 	static $forums_table;
@@ -15,6 +26,7 @@ class AppBase
 
 	protected $action;
 	protected $record;
+	protected $page;
 
 	public function __construct()
 	{
@@ -27,38 +39,89 @@ class AppBase
 	}
 
 	public static $defined_actions = array(
-		"viewforum",
-		"viewthread",
-		"page"
+		self::FORUM_ACTION,
+		self::THREAD_ACTION,
 	);
 
 	public function main($content)
 	{
 		if (!preg_match('|<!--WPFORUM3-->|', $content))
 			return $content;
-		$data = "";
+
+		$offset = "";
 		//self::checkParams();
-		if (isset($_REQUEST["action"])) {
-			$this->action = $_REQUEST["action"];
+
+		if (isset($_REQUEST[self::APP_ACTION])) {
+			$this->action = $_REQUEST[self::APP_ACTION];
 		}
-		if (isset($_REQUEST["record"])) {
-			$this->record = $_REQUEST["record"];
+		if (isset($_REQUEST[self::RECORD])) {
+			$this->record = $_REQUEST[self::RECORD];
 		}
+		if (isset($_REQUEST[self::FORUM_PAGE])) {
+			$this->page = $_REQUEST[self::FORUM_PAGE];
+		}
+
+		$offset = $this->calculateOffset();
+		$view = new View($this->action, $this->record, $offset);
 
 		switch ($this->action) {
-			case "viewforum":
-				$data = View::getInstance()->getForumView($this->action, $this->record);
+			case self::FORUM_ACTION:
+				$data = $view->getForumView();
 				break;
-			case "viewthread":
-				$data = View::getInstance()->getTopicView($this->action, $this->record);
+			case self::THREAD_ACTION:
+				$data = $view->getTopicView();
 				break;
 			default:
-				$data = View::getInstance()->getMainView($this->action, $this->record);
+				$data = $view->getMainView();
 				break;
 		}
 
-		return preg_replace('|<!--WPFORUM3-->|', $data, $content);
+		$header = $this->getHeader();
+		$footer = $this->getFooter();
 
+		return preg_replace('|<!--WPFORUM3-->|', $header . $data . $footer, $content);
+
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function calculateOffset()
+	{
+		switch ($this->action) {
+			case AppBase::FORUM_ACTION:
+				$count = AppBase::THREAD_PAGE_COUNT;
+				break;
+			case AppBase::THREAD_ACTION:
+				$count = AppBase::POST_PAGE_COUNT;
+				break;
+			default:
+				$count = 0;
+		}
+		if ($this->page == 1 or empty($this->page)) {
+			$start = 0;
+		} else {
+			$start = $this->page * $count;
+		}
+
+		return $start;
+	}
+
+	public function getHeader()
+	{
+		return "TODO Header";
+	}
+
+	public function getFooter()
+	{
+		$out = "";
+		if (!empty($this->action)) {
+			$out .= '<div class="pagination"><ul>';
+			$out .= paginate("?page_id=6&action=" . $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action));
+			$out .= "</ul></div>";
+		}
+		return $out;
 	}
 
 	public static function checkParams()
@@ -80,6 +143,7 @@ class AppBase
 			wp_die("Wrong parameters");
 		}
 	}
+
 
 	/*
 	* @param
@@ -137,6 +201,7 @@ class AppBase
 		dbDelta($forums_sql);
 		dbDelta($threads_sql);
 		dbDelta($posts_sql);
+
 	}
 
 	/*
@@ -159,6 +224,7 @@ class AppBase
 	}
 }
 
+
 require_once("assets/Smarty/libs/Smarty.class.php");
 
 if (!defined('WP_CONTENT_DIR'))
@@ -173,33 +239,59 @@ define('WPFPATH', WP_CONTENT_DIR . '/plugins/' . WPFDIR . '/');
 
 class View
 {
-	protected static $_instance;
 	protected $smarty;
 	protected $template_dir;
 	protected $helper;
+	protected $action;
+	protected $record;
+	protected $offset;
 
-	public function __construct()
+	public function __construct($action, $record, $offset)
 	{
+		$this->action = $action;
+		$this->record = $record;
+		$this->offset = $offset;
+
 		$this->template_dir = WPFPATH . "/tpls";
 		$this->smarty = new Smarty();
 		$this->helper = new ForumHelper();
+		$this->assignMisc();
+		$this->assignButtons();
 	}
 
-	public static function getInstance()
+	/*
+	* @param
+	* @return
+	*/
+	public function assignButtons()
 	{
-		if (is_null(self::$_instance)) {
-			self::$_instance = new self();
+		switch ($this->action) {
 		}
-		return self::$_instance;
+
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function assignMisc()
+	{
+		$config = array(
+			"date_format" => "%B %e, %Y",
+		);
+
+		$this->smarty->assign("border", AppBase::$border);
+		$this->smarty->assign("forum_table_class", "forum-table");
+		$this->smarty->assign("config", $config);
 	}
 
 	/*
 	* @param
 	* @return string
 	*/
-	public function getForumView($action, $record)
+	public function getForumView()
 	{
-		$this->smarty->assign("data", $this->helper->getThreadsInForum($record));
+		$this->smarty->assign("data", $this->helper->getThreadsInForum($this->record, $this->offset));
 		return $this->smarty->fetch($this->template_dir . "/threads.tpl");
 	}
 
@@ -208,9 +300,10 @@ class View
 	* @param $record string
 	* @return string
 	*/
-	public function getTopicView($action, $record)
+	public function getTopicView()
 	{
-
+		$this->smarty->assign("data", $this->helper->getPostsInThread($this->record, $this->offset));
+		return $this->smarty->fetch($this->template_dir . "/posts.tpl");
 	}
 
 	/*
@@ -218,7 +311,7 @@ class View
 	* @param $record string
 	* @return string
 	*/
-	public function getMainView($action, $record)
+	public function getMainView()
 	{
 		$this->smarty->assign("data", $this->helper->getCategories());
 		return $this->smarty->fetch($this->template_dir . "/main.tpl");
@@ -232,15 +325,83 @@ class View
 
 class ForumHelper
 {
-	protected $path;
-	protected $forum_link_base;
-	protected $thread_link_base;
+	public $db;
 
 	public function __construct()
 	{
-		$this->path = basename(get_permalink());
-		$this->forum_link_base = $this->path . "&action=viewforum&record=%s";
-		$this->thread_link_base = $this->path . "&action=viewthread&record=%s";
+		global $wpdb;
+		$this->db = $wpdb;
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public static function getTotalPages($action)
+	{
+		global $wpdb;
+		$per_page = "";
+		$table = "";
+		switch ($action) {
+			case AppBase::FORUM_ACTION:
+				$per_page = AppBase::THREAD_PAGE_COUNT;
+				$table = AppBase::$threads_table;
+				break;
+			case AppBase::THREAD_ACTION:
+				$per_page = AppBase::POST_PAGE_COUNT;
+				$table = AppBase::$posts_table;
+				break;
+		}
+
+		$sql = "SELECT count(*) FROM $table";
+		$total_results = $wpdb->get_var($sql);
+		$total_pages = ceil($total_results / $per_page);
+
+		return $total_pages;
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public static function getLink($action, $record)
+	{
+		global $wp_rewrite;
+		$delim = ($wp_rewrite->using_permalinks()) ? "?" : "&amp;";
+
+		switch ($action) {
+			case AppBase::FORUM_ACTION:
+				break;
+			case AppBase::THREAD_ACTION:
+				break;
+		}
+
+		$link_base = array(
+			AppBase::APP_ACTION => $action,
+			AppBase::RECORD => $record
+		);
+		return get_permalink() . $delim . http_build_query($link_base);
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function getPostsInThread($record, $offset)
+	{
+		$limit_query = "LIMIT $offset," . AppBase::POST_PAGE_COUNT;
+
+		$sql = "SELECT p.*, t.subject as thread_subject FROM " . AppBase::$posts_table . " p left join " . AppBase::$threads_table . " t on t.id = p.parent_id WHERE p.parent_id='$record' order by date $limit_query";
+		$posts["posts"] = $this->db->get_results($sql, ARRAY_A);
+		foreach ($posts["posts"] as &$post) {
+			$post["avatar"] = get_avatar($post["user_id"], 65);
+			$user_data = get_userdata($post["user_id"]);
+			$user_data->meta = get_user_meta($post["user_id"]);
+			$post["user"] = $user_data;
+			$post["user"]->post_count = $this->db->get_var("select count(*) from " . AppBase::$posts_table . " where user_id = '{$post["user_id"]}'");
+		}
+		$posts["header"] = $this->getThreadName($record);
+		return $posts;
 	}
 
 	/*
@@ -249,13 +410,12 @@ class ForumHelper
 	*/
 	public function getCategories()
 	{
-		global $wpdb;
 		$sql = "SELECT * FROM " . AppBase::$categories_table . " order by name";
-		$categories = $wpdb->get_results($sql, ARRAY_A);
+		$categories = $this->db->get_results($sql, ARRAY_A);
 
 		foreach ($categories as &$category) {
 			foreach ($this->getForumsInCategory($category["id"]) as $forum) {
-				$forum["href"] = sprintf($this->forum_link_base, $forum["id"]);
+				$forum["href"] = self::getLink(AppBase::FORUM_ACTION, $forum["id"]);//sprintf($this->forum_link_base, $forum["id"]);
 				$category["forums"][] = $forum;
 			}
 		}
@@ -269,14 +429,12 @@ class ForumHelper
 	*/
 	public function getForumsInCategory($category_id)
 	{
-		global $wpdb;
-
 		$sql = "select f.id, f.name, f.description, max(p.date) as last_post, count(distinct(p.id)) as post_count, count(distinct(t.id)) as thread_count from " . AppBase::$forums_table . " f
 					left join " . AppBase::$threads_table . " t on t.parent_id = f.id
 						left join " . AppBase::$posts_table . " p on p.parent_id = t.id
 						where f.parent_id = '{$category_id}'
 				group by f.id;";
-		$result = $wpdb->get_results($sql, ARRAY_A);
+		$result = $this->db->get_results($sql, ARRAY_A);
 		return $result;
 	}
 
@@ -284,19 +442,77 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public function getThreadsInForum($forum_id)
+	public function getThreadsInForum($forum_id, $offset)
 	{
-		global $wpdb;
-		
+		$limit_query = "LIMIT $offset," . AppBase::THREAD_PAGE_COUNT;
+
 		$sql = "select t.*, count(distinct(p.id)) as post_count, max(p.date) as last_post from " . AppBase::$threads_table . " t
 			left join " . AppBase::$posts_table . " p on t.id = p.parent_id
-				where t.parent_id = 2
-			group by t.id;";
-		$threads = $wpdb->get_results($sql, ARRAY_A);
+				where t.parent_id = '$forum_id'
+			group by t.id $limit_query";
+		echo "<pre>";
+		print_r($sql);
+		echo "</pre>";
+		$threads = $this->db->get_results($sql, ARRAY_A);
 
-		foreach($threads as &$thread){
-			$thread["href"] = sprintf($this->thread_link_base, $thread["id"]);
+		foreach ($threads as &$thread) {
+			$thread["href"] = self::getLink(AppBase::THREAD_ACTION, $thread["id"]);
 		}
 		return $threads;
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function getThreadName($id)
+	{
+		$sql = "select subject from " . AppBase::$threads_table . " where id = '{$id}'";
+		return $this->db->get_var($sql);
+	}
+}
+
+function paginate($reload, $page, $tpages)
+{
+	if ($tpages > 1) {
+
+		if(empty($page))$page = 1;
+
+		$adjacents = 4;
+		$prevlabel = "&lsaquo; Prev";
+		$nextlabel = "Next &rsaquo;";
+		$out = "";
+		// previous
+		if ($page == 1) {
+			$out .= "<span style='white-space:nowrap'>" . $prevlabel . "</span>\n";
+		} elseif ($page == 2) {
+			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "\">" . $prevlabel . "</a>\n</li>";
+		} else {
+			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "&amp;page=" . ($page - 1) . "\">" . $prevlabel . "</a>\n</li>";
+		}
+
+		$pmin = ($page > $adjacents) ? ($page - $adjacents) : 1;
+		$pmax = ($page < ($tpages - $adjacents)) ? ($page + $adjacents) : $tpages;
+		for ($i = $pmin; $i <= $pmax; $i++) {
+			if ($i == $page) {
+				$out .= "<li  class=\"active\"><a href=''>" . $i . "</a></li>\n";
+			} elseif ($i == 1) {
+				$out .= "<li><a  href=\"" . $reload . "\">" . $i . "</a>\n</li>";
+			} else {
+				$out .= "<li><a  href=\"" . $reload . "&amp;page=" . $i . "\">" . $i . "</a>\n</li>";
+			}
+		}
+
+		if ($page < ($tpages - $adjacents)) {
+			$out .= "<a style='font-size:11px' href=\"" . $reload . "&amp;page=" . $tpages . "\">" . $tpages . "</a>\n";
+		}
+		// next
+		if ($page < $tpages) {
+			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "&amp;page=" . ($page + 1) . "\">" . $nextlabel . "</a>\n</li>";
+		} else {
+			$out .= "<span style='font-size:11px white-space:nowrap'>" . $nextlabel . "</span>\n";
+		}
+		$out .= "";
+		return $out;
 	}
 }
