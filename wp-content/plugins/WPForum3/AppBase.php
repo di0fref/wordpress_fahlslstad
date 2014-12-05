@@ -6,9 +6,14 @@ class AppBase
 	const FORUMS = "wpforum_forums";
 	const THREADS = "wpforum_threads";
 	const POSTS = "wpforum_posts";
+	const USERS = "users";
 
 	const FORUM_ACTION = "viewforum";
 	const THREAD_ACTION = "viewthread";
+	const NEW_THREAD_ACTION = "newthread";
+	const NEW_POST_ACTION = "newpost";
+	const RSS_POST_ACTION = "rss_feed";
+	const EMAIL_POST_ACTION = "email_sub";
 
 	const RECORD = "record";
 	const APP_ACTION = "action";
@@ -23,6 +28,7 @@ class AppBase
 	static $forums_table;
 	static $threads_table;
 	static $posts_table;
+	static $users_table;
 
 	protected $action;
 	protected $record;
@@ -36,11 +42,16 @@ class AppBase
 		self::$forums_table = $table_prefix . self::FORUMS;
 		self::$threads_table = $table_prefix . self::THREADS;
 		self::$posts_table = $table_prefix . self::POSTS;
+		self::$users_table = $table_prefix . self::USERS;
 	}
 
 	public static $defined_actions = array(
 		self::FORUM_ACTION,
 		self::THREAD_ACTION,
+		self::NEW_THREAD_ACTION,
+		self::NEW_POST_ACTION,
+		self::RSS_POST_ACTION,
+		self::EMAIL_POST_ACTION,
 	);
 
 	public function main($content)
@@ -110,7 +121,6 @@ class AppBase
 
 	public function getHeader()
 	{
-		return "TODO Header";
 	}
 
 	public function getFooter()
@@ -121,6 +131,7 @@ class AppBase
 			$out .= paginate("?page_id=6&action=" . $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action));
 			$out .= "</ul></div>";
 		}
+		$out .= '<div id="forum-dialog" title="Dialog">';
 		return $out;
 	}
 
@@ -167,7 +178,8 @@ class AppBase
 			  `name` varchar(255) NOT NULL default '',
 			  parent_id int(11) NOT NULL default '0',
 			  description varchar(255) NOT NULL default '',
-			  PRIMARY KEY  (id)
+			  PRIMARY KEY  (id),
+			  INDEX primary_idx (primary_id)
 			);";
 
 		$threads_sql = "
@@ -179,9 +191,12 @@ class AppBase
 			  `date` datetime NOT NULL default '0000-00-00 00:00:00',
 			  `status` varchar(20) NOT NULL default 'open',
 			  is_question bool default 0,
+			  is_solved bool default 0,
 			  views int(11) NOT NULL,
 			  user_id int(11) NOT NULL,
-			  PRIMARY KEY  (id)
+			  PRIMARY KEY  (id),
+			  INDEX primary_idx (primary_id),
+			  INDEX user_idx (user_id)
 			);";
 
 		$posts_sql = "
@@ -192,7 +207,9 @@ class AppBase
 			  `date` datetime NOT NULL default '0000-00-00 00:00:00',
 			  user_id int(11) NOT NULL default '0',
 			  `subject` varchar(255) NOT NULL default '',
-			  PRIMARY KEY  (id)
+			  PRIMARY KEY  (id),
+			  INDEX primary_idx (primary_id),
+			  INDEX user_idx (user_id)
 			);";
 
 		require_once(ABSPATH . 'wp-admin/upgrade-functions.php');
@@ -201,7 +218,6 @@ class AppBase
 		dbDelta($forums_sql);
 		dbDelta($threads_sql);
 		dbDelta($posts_sql);
-
 	}
 
 	/*
@@ -219,8 +235,17 @@ class AppBase
 	*/
 	public function enqueue_scripts()
 	{
-		wp_register_style('wpforum_styles', plugins_url('style.css', __FILE__), array(), '20141203', 'all');
+		wp_register_style('wpforum_styles', plugins_url('style.css', __FILE__), array(), '', 'all');
+		wp_register_style('jquery-ui-styles', plugins_url('assets/js/jquery-ui/jquery-ui.min.css', __FILE__), array(), '', 'all');
+
 		wp_enqueue_style('wpforum_styles');
+		wp_enqueue_style('jquery-ui-styles');
+
+		wp_register_script('jquery-ui-js', plugins_url('assets/js/jquery-ui/jquery-ui.min.js', __FILE__), array("jquery"), '', false);
+		wp_register_script('wpforum_script', plugins_url('assets/js/forum.js', __FILE__), array("jquery"), '', false);
+
+		wp_enqueue_script('wpforum_script');
+		wp_enqueue_script('jquery-ui-js');
 	}
 }
 
@@ -265,9 +290,18 @@ class View
 	*/
 	public function assignButtons()
 	{
-		switch ($this->action) {
-		}
-
+		$buttons = array(
+			AppBase::FORUM_ACTION => array(
+				"new_thread" => "<a data-forum-id='" . $this->record . "' class='forum-button new_thread'	href='" . ForumHelper::getLink(AppBase::NEW_THREAD_ACTION, $this->record) . "'>Start Topic</a>",
+			),
+			AppBase::THREAD_ACTION => array(
+				"new_post" => "<a data-thread-id='" . $this->record . "' class='forum-button new_post' href='" . ForumHelper::getLink(AppBase::NEW_POST_ACTION, $this->record) . "'>Reply</a>",
+				"subscribe_rss" => "<a class='forum-button subscribe_rss' href='" . ForumHelper::getLink(AppBase::RSS_POST_ACTION, $this->record) . "'>RSS Feed</a>",
+				"subscribe_email" => "<a class='forum-button subscribe_email' href='" . ForumHelper::getLink(AppBase::EMAIL_POST_ACTION, $this->record) . "'>Email Subscription</a>"
+			),
+		);
+		$buttons[$this->action];
+		$this->smarty->assign("buttons", $buttons[$this->action]);
 	}
 
 	/*
@@ -449,16 +483,27 @@ class ForumHelper
 		$sql = "select t.*, count(distinct(p.id)) as post_count, max(p.date) as last_post from " . AppBase::$threads_table . " t
 			left join " . AppBase::$posts_table . " p on t.id = p.parent_id
 				where t.parent_id = '$forum_id'
-			group by t.id $limit_query";
-		echo "<pre>";
-		print_r($sql);
-		echo "</pre>";
+			group by t.id order by (status = 'sticky') DESC, last_post DESC $limit_query ";
 		$threads = $this->db->get_results($sql, ARRAY_A);
 
 		foreach ($threads as &$thread) {
 			$thread["href"] = self::getLink(AppBase::THREAD_ACTION, $thread["id"]);
+			$thread["icon"] = self::getIcon($thread);
+			$thread["user"] = get_userdata($thread["user_id"]);
+			$thread["last_poster"] = $this->lastPoster($thread["id"]);
+			$thread["last_poster"]["avatar"] = get_avatar($thread["user_id"], 22);
 		}
 		return $threads;
+	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function lastPoster($thread_id)
+	{
+		$sql = "select u.display_name, u.ID, u.user_email from " . AppBase::$users_table . " u LEFT JOIN  " . AppBase::$posts_table . " p on u.id = p.user_id where parent_id = '{$thread_id}' order by date DESC limit 1";
+		return $this->db->get_row($sql, ARRAY_A);
 	}
 
 	/*
@@ -470,13 +515,39 @@ class ForumHelper
 		$sql = "select subject from " . AppBase::$threads_table . " where id = '{$id}'";
 		return $this->db->get_var($sql);
 	}
+
+	/*
+	* @param
+	* @return
+	*/
+	public function getIcon($thread)
+	{
+		switch ($thread["is_question"]) {
+			case "1":
+				if ($thread["is_solved"]) {
+					return "thread-solved";
+				} else {
+					return "thread-is-question";
+				}
+				break;
+			case "0":
+				if ($thread["status"] == "sticky")
+					return "thread-sticky";
+				else {
+					return "thread-open";
+				}
+				break;
+			default:
+				return "thread-open";
+		}
+	}
 }
 
 function paginate($reload, $page, $tpages)
 {
 	if ($tpages > 1) {
 
-		if(empty($page))$page = 1;
+		if (empty($page)) $page = 1;
 
 		$adjacents = 4;
 		$prevlabel = "&lsaquo; Prev";

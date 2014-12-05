@@ -1,4 +1,13 @@
-<h3>{$data.header}</h3>
+<div class="forum-header-wrapper">
+	<div class="forum-title">{$data.header}</div>
+	<div class="forum-buttons">
+		<ul>
+			{foreach from=$buttons item=button key=name}
+				<li>{$button}</li>
+			{/foreach}
+		</ul>
+	</div>
+</div>
 {if $data.posts}
 	{foreach from=$data.posts item=post name=posts_array}
 		<div class="forum-post-wrapper">

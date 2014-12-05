@@ -1,46 +1,138 @@
-.odd{
-	background-color: #eee;
+.forum-header-wrapper{
+	width: 100%;
+	overflow: hidden;
+	height: 60px;
 }
-.center{
+.forum-buttons{
+	width: 60%;
+	float: right;
+
+}
+.forum-title{
+	width: 40%;
+	float: left;
+	font-size: 120%;
+	font-weight: bold;
+}
+.forum-buttons ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	text-align: right;
+}
+
+.forum-buttons ul li {
+	display: inline;
+}
+
+.forum-buttons ul li a {
+	text-decoration: none;
+	padding: .2em 0;
+}
+
+.forum-thread-image {
+	padding-right: 5px;
+	width: 18px;
+	vertical-align: middle;
+}
+
+.forum-thread-image span {
+	width: 35px;
+	height: 25px;
+	margin-top: 4px;
+}
+
+.thread-icon {
+	background-image: url(assets/images/sprites.png);
+	height: 25px;
+	width: 40px;
+	margin: 0 6px 0 0;
+	display: block;
+}
+
+.thread-solved {
+	background-position: -200px -16px;
+}
+
+.thread-is-question {
+	background-position: -74px -16px;
+}
+
+.thread-sticky {
+	background-position: -7px -16px
+}
+
+.thread-open {
+	background-position: -7px -16px
+}
+
+.forum-category {
+	background-position: -517px -80px;
+}
+
+.odd {
+	background-color: #F7F7F7;
+}
+
+.center {
 	text-align: center;
 }
-.small{
+
+.small {
 	font-size: 90%;
 }
-.post_subject{
+
+.bigger {
+	font-size: 110%;
 }
-.bold{
+
+.post_subject {
+}
+
+.bold {
 	font-weight: bold;
 }
 
-.align-top{
+.align-top {
 	vertical-align: top;
 }
-.align-center{
+
+.align-center {
 	text-align: center;
 }
 
-.forum-table{
-	width: 100%;
-}
-.forum-table tr td,
-.forum-table tr th{
-	vertical-align: middle;
-	padding:5px
+.align-right {
+	text-align: right;
 }
 
-.forum-post-wrapper{
+.avatar-22 {
+	vertical-align: middle;
+}
+
+.forum-table {
+	width: 100%;
+}
+
+.forum-table tr td,
+.forum-table tr th {
+	vertical-align: middle;
+	padding: 5px
+}
+
+.forum-post-wrapper {
 	width: 100%;
 	margin: auto;
 	padding: 10px;
 	overflow: hidden;
 }
+
 .forum-left {
 	width: 100px;
 	min-height: 100px;
 	__background: red;
 	float: left;
 }
+
 .forum-right {
 	margin-left: 100px;
 	min-height: 100px;
@@ -50,91 +142,98 @@
 	border-radius: 4px;
 }
 
-.forum-figure{
+.forum-figure {
 	width: 65px;
 	margin: 0;
 	margin-left: 0px;
 	margin-top: 0px;
 	text-align: center;
 }
+
 .forum-post-text,
 .forum-post-meta,
-.forum-post-signature{
+.forum-post-signature {
 	padding: 10px;
 }
-.forum-post-meta{
+
+.forum-post-meta {
 	color: #a4a4a4;
 }
-.forum-post-signature{
+
+.forum-post-signature {
 	font-style: italic;
 	font-size: 90%;
 	margin: 10px;
 }
-.border-top{
+
+.border-top {
 	border-top: 1px solid #E0E0E0;
 }
-.forum-post-first{
-	__background-color: #f4f7fb;
+
+.forum-post-first {
+	background-color: #F7F7F7;
 }
 
 .pagination li {
-	display:inline;
+	display: inline;
 }
+
 .pagination {
-	height:40px;
-	margin:20px 0;
+	height: 40px;
+	margin: 20px 0;
 }
 
 .pagination ul {
-	display:inline;
-	margin-bottom:0;
-	margin-left:0;
-	-webkit-border-radius:3px;
-	-moz-border-radius:3px;
-	border-radius:3px;
-	zoom:1;
-	-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.05);
-	-moz-box-shadow:0 1px 2px rgba(0,0,0,0.05);
-	box-shadow:0 1px 2px rgba(0,0,0,0.05);
+	display: inline;
+	margin-bottom: 0;
+	margin-left: 0;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	zoom: 1;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.pagination a,.pagination span {
-	float:left;
-	line-height:38px;
-	text-decoration:none;
-	background-color:#fff;
-	border:1px solid #ddd;
-	border-left-width:0;
-	padding:0 14px;
+.pagination a, .pagination span {
+	float: left;
+	line-height: 38px;
+	text-decoration: none;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-left-width: 0;
+	padding: 0 14px;
 }
 
-.pagination .active a,.pagination .active span {
-	color:#999;
-	cursor:default;
+.pagination .active a, .pagination .active span {
+	color: #999;
+	cursor: default;
 }
 
-.pagination .disabled span,.pagination .disabled a,.pagination .disabled a:hover {
-	color:#999;
-	cursor:default;
-	background-color:transparent;
+.pagination .disabled span, .pagination .disabled a, .pagination .disabled a:hover {
+	color: #999;
+	cursor: default;
+	background-color: transparent;
 }
 
-.pagination li:first-child a,.pagination li:first-child span {
-	border-left-width:1px;
-	-webkit-border-radius:3px 0 0 3px;
-	-moz-border-radius:3px 0 0 3px;
-	border-radius:3px 0 0 3px;
+.pagination li:first-child a, .pagination li:first-child span {
+	border-left-width: 1px;
+	-webkit-border-radius: 3px 0 0 3px;
+	-moz-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
 }
 
 .pagination-centered {
-	text-align:center;
+	text-align: center;
 }
 
-.pagination li:last-child a,.pagination li:last-child span {
-	-webkit-border-radius:0 3px 3px 0;
-	-moz-border-radius:0 3px 3px 0;
-	border-radius:0 3px 3px 0;
+.pagination li:last-child a, .pagination li:last-child span {
+	-webkit-border-radius: 0 3px 3px 0;
+	-moz-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
 }
-.pagination a:hover,.pagination .active a,.pagination .active span {
-	background-color:#f5f5f5;
+
+.pagination a:hover, .pagination .active a, .pagination .active span {
+	background-color: #f5f5f5;
 }
