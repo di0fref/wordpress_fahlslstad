@@ -1,40 +1,57 @@
 jQuery(function ($) {
-	$(".new_thread").on("click", function () {
-		openPopup("new_thread");
-		return false;
-	});
-	$(".new_post").on("click", function () {
-		return false;
-	});
-	$(".subscribe_rss").on("click", function () {
-		return false;
-	});
-	$(".subscribe_email").on("click", function () {
-		return false;
-	});
 
-	function openPopup(){
-		$("#forum-dialog").dialog({
-			modal: true
-		});
+	$("#forum-form-new-thread").validate();
 
-		$.ajax({
-				url: "index.php",
-				data:{
-					module: "",
-					action: "",
-					to_pdf: true,
-					record: $("input[name=record]").val()
-					},
-					beforeSend: function(){
 
-					},
-					success: function(){
+	/*$(".new_thread").on("click", function () {
+	 openPopup("newthread", $(this));
+	 return false;
+	 });
+	 $(".new_post").on("click", function () {
+	 return false;
+	 });
+	 $(".subscribe_rss").on("click", function () {
+	 return false;
+	 });
+	 $(".subscribe_email").on("click", function () {
+	 return false;
+	 });
 
-					}
-			});
-	}
+	 function openPopup(action, element) {
 
+	 var data = {
+	 action: action,
+	 record: element.data("forum-id"),
+	 nonce: element.data("nonce")
+	 };
+
+	 $("#forum-dialog").dialog({
+	 modal: true,
+	 width: "60%",
+	 height: "auto",
+	 title: "WP Forum",
+	 position: {
+	 my: "center",
+	 at: "center",
+	 of: $("body"),
+	 within: $("body")
+	 },
+	 open: function () {
+	 $(this).load(forumAjax.ajaxurl, data);
+	 },
+	 close: function (event, ui) {
+	 $("#forum-dialog").html("");
+	 },
+	 buttons: {
+	 OK: function () {
+	 },
+	 CANCEL: function () {
+	 $(this).dialog("close");
+	 }
+	 }
+	 });
+	 }
+	 */
 });
 
 

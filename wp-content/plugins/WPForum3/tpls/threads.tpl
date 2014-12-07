@@ -35,7 +35,7 @@
 		{/foreach}
 	{else}
 		<tr>
-			<td colspan="4" class="center bold">No threads yet.</td>
+			<td colspan="5" class="center bold">No threads yet.</td>
 		</tr>
 	{/if}
 </table>

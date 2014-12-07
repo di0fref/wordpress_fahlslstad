@@ -1,19 +1,36 @@
-.forum-header-wrapper{
+label.error {
+	float: none; color: red;
+	padding-left: .5em;
+	vertical-align: top;
+	display: block;
+}​
+ .forum-table tr th tr td.align-top {
+	vertical-align: top;
+}
+
+.align-center {
+
+}
+
+.forum-header-wrapper {
 	width: 100%;
 	overflow: hidden;
 	height: 60px;
 }
-.forum-buttons{
+
+.forum-buttons {
 	width: 60%;
 	float: right;
 
 }
-.forum-title{
+
+.forum-title {
 	width: 40%;
 	float: left;
 	font-size: 120%;
 	font-weight: bold;
 }
+
 .forum-buttons ul {
 	margin: 0;
 	padding: 0;
@@ -43,7 +60,7 @@
 }
 
 .thread-icon {
-	background-image: url(assets/images/sprites.png);
+	background-image: url(../images/sprites.png);
 	height: 25px;
 	width: 40px;
 	margin: 0 6px 0 0;
@@ -83,7 +100,7 @@
 }
 
 .bigger {
-	font-size: 110%;
+	font-size: 105%;
 }
 
 .post_subject {
@@ -116,7 +133,11 @@
 .forum-table tr td,
 .forum-table tr th {
 	vertical-align: middle;
-	padding: 5px
+	padding: 5px;
+}
+
+#forum-wrapper .forum-table {
+	border: none;
 }
 
 .forum-post-wrapper {
