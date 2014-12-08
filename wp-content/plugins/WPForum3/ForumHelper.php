@@ -162,7 +162,7 @@ class ForumHelper
 			$post["avatar"] = get_avatar($post["user_id"], 65);
 			$post["user"] = $this->getUserDataFiltered($post["user_id"]);
 
-			if (!in_array($thread["status"], array("closed")) and !$thread["is_solved"])   {
+			if (!in_array($thread["status"], array("closed")) and !$thread["is_solved"]) {
 				$post["post_links"] = array(
 					"quote" => array(
 						"href" => ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $record, array(AppBase::FORUM_QUOTE, $post["id"])),
@@ -348,6 +348,13 @@ class ForumHelper
 		return $this->db->get_var($sql);
 	}
 
+	static function getNextPostNr($thread_id)
+	{
+		global $wpdb;
+		$sql = "SELECT max(nr) from " . AppBase::$posts_table . " WHERE parent_id = '$thread_id'";
+		return $wpdb->get_var($sql)+1;
+
+	}
 }
 
 

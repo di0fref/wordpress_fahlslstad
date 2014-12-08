@@ -6,6 +6,12 @@ label.error {
 	display: block;
 }
 
+#left {
+	float: left
+}
+#right {
+	overflow: hidden
+}
 ​
 .forum-table tr td.align-top {
 	vertical-align: top;
@@ -27,15 +33,10 @@ label.error {
 	height: 40px;
 }
 
-.forum-buttons {
-	width: 100%;
-}
 
 .forum-title {
-	width: 100%;
-	font-size: 110%;
+	font-size: 120%;
 	font-weight: bold;
-	padding-left: 110px;
 }
 
 .forum-buttons ul {
@@ -146,15 +147,16 @@ label.error {
 	vertical-align: middle;
 	padding: 5px;
 }
-
+#forum-wrapper{
+	background-color: #ffffff;
+}
 #forum-wrapper .forum-table {
 	border: none;
 }
 
 .forum-post-wrapper {
 	width: 100%;
-	margin: auto;
-	padding: 10px;
+	margin: 20px 0;
 	overflow: hidden;
 }
 
@@ -297,4 +299,7 @@ label.error {
 .forum-post-links ul li a {
 	text-decoration: none;
 	padding: .2em 0;
+}
+.post-id-meta{
+	float: right;
 }

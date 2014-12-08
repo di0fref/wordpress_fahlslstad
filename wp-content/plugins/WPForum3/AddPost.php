@@ -10,12 +10,13 @@ $text = ForumHelper::input_filter($_REQUEST["text"]);
 
 $user_id = get_current_user_id();
 $date = date("Y-m-d H:i:s");
-
+$nr = ForumHelper::getNextPostNr($thread_id);
 /* Add thread */
 $post_id = create_guid();
 
 $sql_post = "INSERT INTO " . AppBase::$posts_table . "
 	(
+		nr,
 		subject,
 		id,
 		text,
@@ -24,6 +25,7 @@ $sql_post = "INSERT INTO " . AppBase::$posts_table . "
 		user_id
 	)
 	VALUES(
+		'$nr',
 		'$subject',
 		'$post_id',
 		'$text',
@@ -31,7 +33,6 @@ $sql_post = "INSERT INTO " . AppBase::$posts_table . "
 		'$date',
 		'$user_id'
 		)";
-
 
 $wpdb->query($sql_post);
 

@@ -34,7 +34,7 @@ class AppBase
 
 	const THREAD_PAGE_COUNT = 5;
 	const POST_PAGE_COUNT = 5;
-	const FORUM_PAGE = "page";
+	const FORUM_PAGE = "p_";
 	const FORUM_QUOTE = "quote";
 
 	const TRAIL_SEPARATOR = " &rarr; ";
@@ -73,8 +73,8 @@ class AppBase
 		self::THREAD_VIEW_ACTION,
 		self::NEW_THREAD_VIEW_ACTION,
 		self::NEW_POST_VIEW_ACTION,
-		self::RSS_POST_ACTION,
-		self::EMAIL_POST_ACTION,
+		//self::RSS_POST_ACTION,
+		//self::EMAIL_POST_ACTION,
 		self::MARK_SOLVED_ACTION
 	);
 
@@ -170,7 +170,8 @@ class AppBase
 		$out = "";
 		if (!empty($this->action)) {
 			$out .= '<div class="pagination"><ul>';
-			$out .= paginate("?page_id=6&action=" . $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action, $this->record));
+
+			$out .= paginate(get_permalink() ."?".AppBase::APP_ACTION."=". $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action, $this->record));
 			$out .= "</ul></div>";
 		}
 		$out .= '<div id="forum-dialog" title="Dialog">';
@@ -243,6 +244,7 @@ class AppBase
 			  `date` datetime NOT NULL default '0000-00-00 00:00:00',
 			  user_id int(11) NOT NULL default '0',
 			  `subject` varchar(255) NOT NULL default '',
+			  nr int(11) NOT NULL,
 			  PRIMARY KEY  (id),
 			  INDEX parent_idx (parent_id),
 			  INDEX user_idx (user_id)
@@ -332,6 +334,7 @@ class AppBase
 
 function paginate($reload, $page, $tpages)
 {
+	$delim = "&";
 	if ($tpages > 1) {
 
 		if (empty($page)) $page = 1;
@@ -346,7 +349,7 @@ function paginate($reload, $page, $tpages)
 		} elseif ($page == 2) {
 			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "\">" . $prevlabel . "</a>\n</li>";
 		} else {
-			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "&amp;page=" . ($page - 1) . "\">" . $prevlabel . "</a>\n</li>";
+			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "$delim".AppBase::FORUM_PAGE."=" . ($page - 1) . "\">" . $prevlabel . "</a>\n</li>";
 		}
 
 		$pmin = ($page > $adjacents) ? ($page - $adjacents) : 1;
@@ -357,16 +360,16 @@ function paginate($reload, $page, $tpages)
 			} elseif ($i == 1) {
 				$out .= "<li><a  href=\"" . $reload . "\">" . $i . "</a>\n</li>";
 			} else {
-				$out .= "<li><a  href=\"" . $reload . "&amp;page=" . $i . "\">" . $i . "</a>\n</li>";
+				$out .= "<li><a  href=\"" . $reload . "$delim".AppBase::FORUM_PAGE."=" . $i . "\">" . $i . "</a>\n</li>";
 			}
 		}
 
 		if ($page < ($tpages - $adjacents)) {
-			$out .= "<a style='font-size:11px' href=\"" . $reload . "&amp;page=" . $tpages . "\">" . $tpages . "</a>\n";
+			$out .= "<a style='font-size:11px' href=\"" . $reload . "$delim".AppBase::FORUM_PAGE."=" . $tpages . "\">" . $tpages . "</a>\n";
 		}
 		// next
 		if ($page < $tpages) {
-			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "&amp;page=" . ($page + 1) . "\">" . $nextlabel . "</a>\n</li>";
+			$out .= "<li style='white-space:nowrap'><a  href=\"" . $reload . "$delim".AppBase::FORUM_PAGE."=" . ($page + 1) . "\">" . $nextlabel . "</a>\n</li>";
 		} else {
 			$out .= "<span style='font-size:11px white-space:nowrap'>" . $nextlabel . "</span>\n";
 		}

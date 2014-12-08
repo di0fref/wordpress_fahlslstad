@@ -44,6 +44,8 @@ class ForumView
 			$quote_data = array(
 				"post" => $post,
 				"user" => $this->helper->getUserDataFiltered($post["user_id"]),
+				//"link" => "<a href='#".$post["nr"]."'>#".$post["nr"]."</a>",
+				//"link" => "[url]#post_".$post["nr"]."[/url]",
 				"quote_text" => "Originally posted by: ",
 			);
 			$this->smarty->assign("quote_data", $quote_data);

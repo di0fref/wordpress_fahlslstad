@@ -44,6 +44,7 @@ $sql_thread = "
 $post_id = create_guid();
 $sql_post = "INSERT INTO " . AppBase::$posts_table . "
 	(
+		nr,
 		subject,
 		id,
 		text,
@@ -52,6 +53,7 @@ $sql_post = "INSERT INTO " . AppBase::$posts_table . "
 		user_id
 	)
 	VALUES(
+		'1',
 		'$subject',
 		'$post_id',
 		'$text',

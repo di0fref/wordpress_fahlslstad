@@ -1,18 +1,18 @@
 <div class="forum-trail">{$trail}</div>
 <!--<div class="forum-header-wrapper">-->
-
-	<div class="forum-buttons">
+<div class="forum-title" id="left">{$data.prefix}{$data.header}</div>
+	<div class="forum-buttons" id="right">
 		<ul>
 			{foreach from=$buttons item=button key=name}
 				<li>{$button}</li>
 			{/foreach}
 		</ul>
 	</div>
-<div class="forum-title">{$data.prefix}{$data.header}</div>
+
 <!--</div>-->
 {if $data.posts}
 	{foreach from=$data.posts item=post name=posts_array}
-		<div class="forum-post-wrapper">
+		<div class="forum-post-wrapper" id="post_{$post.nr}">
 			<div class="forum-left">
 				<figure class="forum-figure">
 					{$post.avatar}
@@ -25,7 +25,7 @@
 			<div class="forum-right {if $smarty.foreach.posts_array.first}forum-post-first{/if}">
 				<div class="forum-post-meta">
 					<!--<span class="post-author bold">{if $post.user->display_name eq ""}Guest{else}{$post.user->display_name}{/if}</span><br>-->
-					<span class="small post-date">Posted: {$post.date|date_format:$config.date_format}</span>
+					<span class="small post-date">Posted: {$post.date|date_format:$config.date_format}</span><span class="post-id-meta">#{$post.nr}</span>
 				</div>
 				<div class="forum-post-text">
 					{$post.text|nl2br}
