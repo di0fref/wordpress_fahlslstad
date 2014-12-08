@@ -156,24 +156,25 @@ class ForumHelper
 
 		$sql = "SELECT p.*, t.subject as thread_subject FROM " . AppBase::$posts_table . " p left join " . AppBase::$threads_table . " t on t.id = p.parent_id WHERE p.parent_id='$record' order by date $limit_query";
 		$posts["posts"] = $this->db->get_results($sql, ARRAY_A);
+		$thread = $this->getThread($record);
 		foreach ($posts["posts"] as &$post) {
 			$post["text"] = $this->outPutFilter($post["text"]);
 			$post["avatar"] = get_avatar($post["user_id"], 65);
 			$post["user"] = $this->getUserDataFiltered($post["user_id"]);
-			$post["post_links"] = array(
-				"quote" => array(
-					"href" => ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $record, array(AppBase::FORUM_QUOTE, $post["id"])),
-					"text" => "Reply With Quote",
-				),
-			);
+
+			if (!in_array($thread["status"], array("closed")) and !$thread["is_solved"])   {
+				$post["post_links"] = array(
+					"quote" => array(
+						"href" => ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $record, array(AppBase::FORUM_QUOTE, $post["id"])),
+						"text" => "Reply With Quote",
+					),
+				);
+			}
 		}
-		$thread = $this->getThread($record);
+
 		$subject = $thread["subject"];
 		$posts["header"] = $subject;
 		$posts["prefix"] = $this->getThreadPrefix($thread);
-echo "<pre>";
-print_r($sql);
-echo "</pre>";
 		return $posts;
 	}
 
@@ -193,7 +194,7 @@ echo "</pre>";
 
 		foreach ($categories as &$category) {
 			foreach ($this->getForumsInCategory($category["id"]) as $forum) {
-				$forum["href"] = self::getLink(AppBase::FORUM_VIEW_ACTION, $forum["id"]);//sprintf($this->forum_link_base, $forum["id"]);
+				$forum["href"] = self::getLink(AppBase::FORUM_VIEW_ACTION, $forum["id"]);
 				$category["forums"][] = $forum;
 			}
 		}
@@ -248,7 +249,7 @@ echo "</pre>";
 			$prefix = "<span class='forum-solved-prefix'>[Solved]</span> ";
 		}
 		if ($thread["status"] == "sticky") {
-			$prefix = "<span class='forum-sticky-prefix'>Sticky</span> ";
+			$prefix = "<span class='forum-sticky-prefix'>[Sticky]</span> ";
 		}
 		if ($thread["status"] == "closed") {
 			$prefix = "<span class='forum-closed-prefix'>[Closed]</span> ";

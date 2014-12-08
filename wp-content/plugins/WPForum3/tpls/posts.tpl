@@ -1,6 +1,6 @@
 <div class="forum-trail">{$trail}</div>
-<div class="forum-header-wrapper">
-	<div class="forum-title">{$data.prefix}{$data.header}</div>
+<!--<div class="forum-header-wrapper">-->
+
 	<div class="forum-buttons">
 		<ul>
 			{foreach from=$buttons item=button key=name}
@@ -8,7 +8,8 @@
 			{/foreach}
 		</ul>
 	</div>
-</div>
+<div class="forum-title">{$data.prefix}{$data.header}</div>
+<!--</div>-->
 {if $data.posts}
 	{foreach from=$data.posts item=post name=posts_array}
 		<div class="forum-post-wrapper">

@@ -28,15 +28,14 @@ label.error {
 }
 
 .forum-buttons {
-	width: 50%;
-	float: right;
+	width: 100%;
 }
 
 .forum-title {
-	width: 40%;
-	float: left;
-	font-size: 120%;
+	width: 100%;
+	font-size: 110%;
 	font-weight: bold;
+	padding-left: 110px;
 }
 
 .forum-buttons ul {
@@ -52,7 +51,7 @@ label.error {
 
 .forum-buttons ul li a {
 	text-decoration: none;
-	padding: .2em 0;
+	padding: .2em 5px;
 }
 
 .forum-thread-image {
@@ -74,8 +73,6 @@ label.error {
 	margin: 0 6px 0 0;
 	display: block;
 }
-
-
 
 .thread-solved {
 	background-position: -200px -16px;

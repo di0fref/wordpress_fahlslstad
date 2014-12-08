@@ -70,8 +70,8 @@ class ForumView
 					"new_thread" => "<a data-forum-id='" . $this->record . "' class='forum-button new_thread' href='" . ForumHelper::getLink(AppBase::NEW_THREAD_VIEW_ACTION, $this->record) . "'>Start Topic</a>",
 				),
 				AppBase::THREAD_VIEW_ACTION => array(
-					"new_post" => "<a data-thread-id='" . $this->record . "' class='forum-button new_post' href='" . ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $this->record) . "'>Reply</a>",
-					//"subscribe_rss" => "<a class='forum-button subscribe_rss' href='" . ForumHelper::getLink(AppBase::RSS_POST_ACTION, $this->record) . "'>RSS Feed</a>",
+					"new_post" => "<a data-thread-id='" . $this->record . "' class='forum-button forum-reply-button' href='" . ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $this->record) . "'>Reply</a>",
+					"subscribe_rss" => "<a class='forum-button subscribe_rss' href='" . ForumHelper::getLink(AppBase::RSS_POST_ACTION, $this->record) . "'>RSS Feed</a>",
 					//"subscribe_email" => "<a class='forum-button subscribe_email' href='" . ForumHelper::getLink(AppBase::EMAIL_POST_ACTION, $this->record) . "'>Email Subscription</a>"
 				),
 			);
