@@ -1,3 +1,4 @@
+<div class="forum-trail">{$trail}</div>
 {foreach from=$data item=cat}
 	<table border="{$border}" class="{$forum_table_class}">
 		<tr>
@@ -16,8 +17,8 @@
 					<a class="bold bigger" href="{$forum.href}">{$forum.name}</a><br>
 					<span class="small">{$forum.description}</span>
 				</td>
-				<td class="center">{$forum.thread_count}</td>
-				<td class="center">{$forum.post_count}</td>
+				<td class="center">{$forum.thread_count|number_format:0}</td>
+				<td class="center">{$forum.post_count|number_format:0}</td>
 				<td>{$forum.last_post|date_format:$config.date_format}</td>
 			</tr>
 		{/foreach}

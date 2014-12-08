@@ -1,3 +1,4 @@
+<div class="forum-trail">{$trail}</div>
 <div class="forum-header-wrapper">
 	<div class="forum-buttons">
 		<ul>
@@ -22,13 +23,11 @@
 				<td class="forum-thread-image">
 					<span title="" class="thread-icon {$thread.icon}"></span>
 				</td>
-				<td>
-					{if $thread.status == "sticky"}<span class="bold ">Sticky:</span>{/if} <a class="bold bigger"
-																							  href="{$thread.href}">{$thread.subject}</a><br>
+				<td><span class="thread-prefix">{$thread.prefix}</span><a class="bold bigger" href="{$thread.href}">{$thread.subject}</a><br>
 					<span class="small">{if $thread.last_post eq ""}No posts yet.{else}{$thread.last_post|date_format:$config.date_format}{/if}</span>
 				</td>
-				<td class="center">{$thread.post_count}</td>
-				<td class="center">{$thread.views}</td>
+				<td class="center">{$thread.post_count|number_format:0}</td>
+				<td class="center">{$thread.views|number_format:0}</td>
 				<td class="align-right small">
 					by {if $thread.last_poster.display_name eq ""}Guest{else}{$thread.last_poster.display_name}{/if} {$thread.last_poster.avatar}</td>
 			</tr>

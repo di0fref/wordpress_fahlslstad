@@ -1,10 +1,13 @@
 label.error {
-	float: none; color: red;
+	float: none;
+	color: red;
 	padding-left: .5em;
 	vertical-align: top;
 	display: block;
-}​
- .forum-table tr th tr td.align-top {
+}
+
+​
+.forum-table tr th tr td.align-top {
 	vertical-align: top;
 }
 
@@ -12,16 +15,19 @@ label.error {
 
 }
 
+.forum-trail {
+	margin: 20px 0;
+}
+
 .forum-header-wrapper {
 	width: 100%;
 	overflow: hidden;
-	height: 60px;
+	height: 40px;
 }
 
 .forum-buttons {
-	width: 60%;
+	width: 50%;
 	float: right;
-
 }
 
 .forum-title {
@@ -67,6 +73,8 @@ label.error {
 	display: block;
 }
 
+
+
 .thread-solved {
 	background-position: -200px -16px;
 }
@@ -80,6 +88,10 @@ label.error {
 }
 
 .thread-open {
+	background-position: -7px -16px
+}
+
+.thread-closed {
 	background-position: -7px -16px
 }
 
@@ -156,8 +168,7 @@ label.error {
 
 .forum-right {
 	margin-left: 100px;
-	min-height: 100px;
-	__background: #ccc;
+	min-height: 50px;
 	border: 1px solid #E0E0E0;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -172,11 +183,12 @@ label.error {
 }
 
 .forum-post-text,
-.forum-post-meta,
-.forum-post-signature {
-	padding: 10px;
+.forum-post-meta{
+	padding: 5px 20px;
 }
-
+.forum-post-signature {
+	padding: 5px 10px;
+}
 .forum-post-meta {
 	color: #a4a4a4;
 }
@@ -184,7 +196,8 @@ label.error {
 .forum-post-signature {
 	font-style: italic;
 	font-size: 90%;
-	margin: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .border-top {
@@ -257,4 +270,32 @@ label.error {
 
 .pagination a:hover, .pagination .active a, .pagination .active span {
 	background-color: #f5f5f5;
+}
+
+.forum-solved-prefix{
+	color: green;
+}
+.forum-closed-prefix{
+	color: red;
+}
+.forum-sticky-prefix{}
+
+.forum-post-links{
+	padding-right: 10px;
+	background-color: #eee;
+}
+.forum-post-links ul {
+	margin: 0 !important;
+	padding: 0;
+	list-style-type: none;
+	text-align: right;
+}
+
+.forum-post-links ul li {
+	display: inline;
+}
+
+.forum-post-links ul li a {
+	text-decoration: none;
+	padding: .2em 0;
 }

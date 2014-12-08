@@ -3,6 +3,11 @@ require_once("ForumHelper.php");
 require_once("ForumView.php");
 require_once("assets/guid.php");
 
+if (!defined('WP_CONTENT_DIR')) define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
+define('WPFDIR', dirname(plugin_basename(__FILE__)));
+define('WPFPATH', WP_CONTENT_DIR . '/plugins/' . WPFDIR . '/');
+define('WPFURL', WP_CONTENT_URL . '/plugins/' . WPFDIR . '/');
+
 /*
 * Class:
 * Author: Fredrik Fahlstad
@@ -22,6 +27,7 @@ class AppBase
 	const NEW_POST_VIEW_ACTION = "newpost";
 	const RSS_POST_ACTION = "rss_feed";
 	const EMAIL_POST_ACTION = "email_sub";
+	const MARK_SOLVED_ACTION = "marksolved";
 
 	const RECORD = "record";
 	const APP_ACTION = "action";
@@ -29,9 +35,12 @@ class AppBase
 	const THREAD_PAGE_COUNT = 20;
 	const POST_PAGE_COUNT = 20;
 	const FORUM_PAGE = "page";
+	const FORUM_QUOTE = "quote";
 
-
+	const TRAIL_SEPARATOR = " &rarr; ";
 	const OPTION_FORUM_REDIRECT = "option_forum_redirect";
+
+	const WPFORUM_INSERT_NONCE = "wpforum_insert_nonce";
 
 	static $border = 0;
 
@@ -63,6 +72,7 @@ class AppBase
 		self::NEW_POST_VIEW_ACTION,
 		self::RSS_POST_ACTION,
 		self::EMAIL_POST_ACTION,
+		self::MARK_SOLVED_ACTION
 	);
 
 	public function main($content)
@@ -83,7 +93,9 @@ class AppBase
 			$this->page = $_REQUEST[self::FORUM_PAGE];
 			self::checkParams($this->page);
 		}
-
+		if (isset($_REQUEST[self::FORUM_QUOTE])) {
+			self::checkParams($_REQUEST[self::FORUM_QUOTE], "guid");
+		}
 		$offset = $this->calculateOffset();
 		$view = new ForumView($this->action, $this->record, $offset);
 
@@ -96,6 +108,9 @@ class AppBase
 				break;
 			case self::NEW_THREAD_VIEW_ACTION:
 				$data = $view->getNewThreadView();
+				break;
+			case self::NEW_POST_VIEW_ACTION:
+				$data = $view->getNewPostView();
 				break;
 			default:
 				$data = $view->getMainView();
@@ -154,15 +169,18 @@ class AppBase
 
 	public static function checkParams($parm, $type = "")
 	{
-
 		switch ($type) {
 			case "guid":
-				return is_guid($parm);
+				if (!is_guid($parm) and !is_numeric($parm)) {
+					wp_die("Bad request, please re-enter 1.");
+				}
+				return true;
 				break;
 		}
+
 		$regexp = "/^([+-]?((([0-9]+(\.)?)|([0-9]*\.[0-9]+))([eE][+-]?[0-9]+)?))$/";
 		if (!preg_match($regexp, $parm))
-			wp_die("Bad request, please re-enter.");
+			wp_die("Bad request, please re-enter 2.");
 	}
 
 
@@ -276,27 +294,35 @@ class AppBase
 		/* Processing forms */
 
 		/* New thread */
-		if(isset($_POST["forum-form-new-thread"])){
+		if (isset($_POST["forum-form-new-thread"])) {
+			if (!is_user_logged_in()) {
+				wp_die("No naughty business please");
+			}
+			self::verifyNonce(self::WPFORUM_INSERT_NONCE);
 			include("AddThread.php");
 			header("Location:" . $redirect_url);
 			exit();
 		}
 
 		/* Post reply*/
-		if(isset($_POST["forum-form-new-post"])){
-			include("AddThread.php");
+		if (isset($_POST["forum-form-new-post"])) {
+			if (!is_user_logged_in()) {
+				wp_die("No naughty business please");
+			}
+			self::verifyNonce(self::WPFORUM_INSERT_NONCE);
+			include("AddPost.php");
 			header("Location:" . $redirect_url);
 			exit();
 		}
 	}
+
+	public static function verifyNonce($nonce)
+	{
+		if (!wp_verify_nonce($_REQUEST['nonce'], $nonce)) {
+			wp_die("No naughty business please");
+		}
+	}
 }
-
-
-if (!defined('WP_CONTENT_DIR'))
-	define('WP_CONTENT_DIR', ABSPATH . 'wp-content');
-define('WPFDIR', dirname(plugin_basename(__FILE__)));
-define('WPFPATH', WP_CONTENT_DIR . '/plugins/' . WPFDIR . '/');
-define('WPFURL', WP_CONTENT_URL . '/plugins/' . WPFDIR . '/');
 
 
 function paginate($reload, $page, $tpages)

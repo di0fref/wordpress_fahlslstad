@@ -1,6 +1,31 @@
 jQuery(function ($) {
 
 	$("#forum-form-new-thread").validate();
+	$("#forum-form-new-post").validate();
+
+	$("#marksolved").on("click", function () {
+		if (confirm("Do you want to mark this topic as solved?")) {
+			var record = $(this).data("thread-id");
+			var nonce = $(this).data("nonce");
+			$.ajax({
+				url: forumAjax.ajaxurl,
+				dataType: "json",
+				async: false,
+				data: {
+					action: "marksolved",
+					record: record,
+					nonce: nonce
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					alert(textStatus);
+				},
+				success: function (response) {
+					location.reload();
+				}
+			});
+		}
+		return false;
+	});
 
 
 	/*$(".new_thread").on("click", function () {
