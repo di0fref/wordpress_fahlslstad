@@ -83,6 +83,9 @@ class ForumView
 						if ($thread["is_question"] && !$thread["is_solved"]) {
 							$buttons[$this->action]["mark_solved"] = "<a data-nonce='$nonce' data-thread-id='$this->record' id='marksolved' href='" . ForumHelper::getLink(AppBase::MARK_SOLVED_ACTION, $this->record) . "'>Mark solved</a>";
 						}
+						if ($thread["is_solved"] or $thread["status"] == "closed") {
+							unset($buttons[$this->action]["new_post"]);
+						}
 					}
 					break;
 			}
@@ -103,8 +106,7 @@ class ForumView
 	public function assignMisc()
 	{
 		$config = array(
-			"date_format" => "%B %e, %Y",
-			"number_format" => "0:'b':'hb'",
+			"date_format" => get_option(AppBase::OPTION_DATE_FORMAT),
 		);
 
 		$this->smarty->assign("border", AppBase::$border);

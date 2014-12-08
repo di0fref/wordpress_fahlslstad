@@ -13,7 +13,7 @@
 				<td class="forum-thread-image">
 					<span title="" class="thread-icon forum-category"></span>
 				</td>
-				<td>
+				<td class="align-left">
 					<a class="bold bigger" href="{$forum.href}">{$forum.name}</a><br>
 					<span class="small">{$forum.description}</span>
 				</td>

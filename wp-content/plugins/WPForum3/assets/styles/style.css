@@ -7,10 +7,12 @@ label.error {
 }
 
 ​
-.forum-table tr th tr td.align-top {
+.forum-table tr td.align-top {
 	vertical-align: top;
 }
-
+.forum-table tr td.align-left {
+	text-align: left !important;
+}
 .align-center {
 
 }

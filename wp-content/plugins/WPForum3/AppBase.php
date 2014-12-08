@@ -32,15 +32,18 @@ class AppBase
 	const RECORD = "record";
 	const APP_ACTION = "action";
 
-	const THREAD_PAGE_COUNT = 20;
-	const POST_PAGE_COUNT = 20;
+	const THREAD_PAGE_COUNT = 5;
+	const POST_PAGE_COUNT = 5;
 	const FORUM_PAGE = "page";
 	const FORUM_QUOTE = "quote";
 
 	const TRAIL_SEPARATOR = " &rarr; ";
-	const OPTION_FORUM_REDIRECT = "option_forum_redirect";
-
 	const WPFORUM_INSERT_NONCE = "wpforum_insert_nonce";
+
+	/* Options */
+	const OPTION_DATE_FORMAT = "wpforum_option_date_format";
+	const OPTION_THREADS_VIEW_COUNT = "wpforum_option_threads_view_count";
+	const OPTION_POSTS_VIEW_COUNT = "wpforum_option_posts_view_count";
 
 	static $border = 0;
 
@@ -74,6 +77,14 @@ class AppBase
 		self::EMAIL_POST_ACTION,
 		self::MARK_SOLVED_ACTION
 	);
+
+	function init()
+	{
+		add_option(self::OPTION_DATE_FORMAT, "%B %e, %Y");
+		add_option(self::OPTION_THREADS_VIEW_COUNT, 20);
+		add_option(self::OPTION_POSTS_VIEW_COUNT . 20);
+
+	}
 
 	public function main($content)
 	{
@@ -145,9 +156,8 @@ class AppBase
 		if ($this->page == 1 or empty($this->page)) {
 			$start = 0;
 		} else {
-			$start = $this->page * $count;
+			$start = ($this->page-1) * $count;
 		}
-
 		return $start;
 	}
 
@@ -160,7 +170,7 @@ class AppBase
 		$out = "";
 		if (!empty($this->action)) {
 			$out .= '<div class="pagination"><ul>';
-			$out .= paginate("?page_id=6&action=" . $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action));
+			$out .= paginate("?page_id=6&action=" . $this->action . "&record={$this->record}", $this->page, ForumHelper::getTotalPages($this->action, $this->record));
 			$out .= "</ul></div>";
 		}
 		$out .= '<div id="forum-dialog" title="Dialog">';
@@ -203,7 +213,7 @@ class AppBase
 			CREATE TABLE IF NOT EXISTS " . self::$forums_table . " (
 			  id varchar(36) NOT NULL default '',
 			  `name` varchar(255) NOT NULL default '',
-			  parent_id int(11) NOT NULL default '0',
+			  parent_id varchar(36) NOT NULL default '',
 			  description varchar(255) NOT NULL default '',
 			  PRIMARY KEY  (id),
 			  INDEX parent_idx (parent_id)
@@ -212,7 +222,7 @@ class AppBase
 		$threads_sql = "
 			CREATE TABLE IF NOT EXISTS " . self::$threads_table . " (
 			  id varchar(36) NOT NULL default '',
-			  parent_id int(11) NOT NULL default '0',
+			  parent_id varchar(36) NOT NULL default '',
 			  views int(11) NOT NULL default '0',
 			  `subject` varchar(255) NOT NULL default '',
 			  `date` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -229,7 +239,7 @@ class AppBase
 			CREATE TABLE IF NOT EXISTS " . self::$posts_table . " (
 			  id varchar(36) NOT NULL default '',
 			  `text` longtext,
-			  parent_id int(11) NOT NULL default '0',
+			  parent_id varchar(36) NOT NULL default '',
 			  `date` datetime NOT NULL default '0000-00-00 00:00:00',
 			  user_id int(11) NOT NULL default '0',
 			  `subject` varchar(255) NOT NULL default '',
@@ -282,11 +292,6 @@ class AppBase
 		wp_enqueue_script('jquery_validate_js');
 
 		wp_localize_script('wpforum_script', 'forumAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
-	}
-
-	function init()
-	{
-		add_option(self::OPTION_FORUM_REDIRECT, "");
 	}
 
 	function processForm()

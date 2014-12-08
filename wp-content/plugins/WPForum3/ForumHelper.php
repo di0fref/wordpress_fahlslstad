@@ -45,8 +45,7 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public
-	static function getTotalPages($action)
+	public static function getTotalPages($action, $record)
 	{
 		global $wpdb;
 		switch ($action) {
@@ -61,8 +60,7 @@ class ForumHelper
 			default:
 				return 1;
 		}
-
-		$sql = "SELECT count(*) FROM $table";
+		$sql = "SELECT count(*) FROM $table where parent_id = '$record'";
 		$total_results = $wpdb->get_var($sql);
 		$total_pages = ceil($total_results / $per_page);
 
@@ -77,7 +75,6 @@ class ForumHelper
 		$result = array(
 			get_the_title()
 		);
-
 
 		switch ($action) {
 			case AppBase::FORUM_VIEW_ACTION:
@@ -144,6 +141,15 @@ class ForumHelper
 	* @param
 	* @return
 	*/
+	public function updateThreadViewCount($thread_id)
+	{
+		$thread = $this->getThread($thread_id);
+	}
+
+	/*
+	* @param
+	* @return
+	*/
 	public function getPostsInThread($record, $offset)
 	{
 		$limit_query = "LIMIT $offset," . AppBase::POST_PAGE_COUNT;
@@ -165,7 +171,9 @@ class ForumHelper
 		$subject = $thread["subject"];
 		$posts["header"] = $subject;
 		$posts["prefix"] = $this->getThreadPrefix($thread);
-
+echo "<pre>";
+print_r($sql);
+echo "</pre>";
 		return $posts;
 	}
 
@@ -178,8 +186,7 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public
-	function getCategories()
+	public function getCategories()
 	{
 		$sql = "SELECT * FROM " . AppBase::$categories_table . " order by name";
 		$categories = $this->db->get_results($sql, ARRAY_A);
@@ -198,8 +205,7 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public
-	function getForumsInCategory($category_id)
+	public function getForumsInCategory($category_id)
 	{
 		$sql = "select f.id, f.name, f.description, max(p.date) as last_post, count(distinct(p.id)) as post_count, count(distinct(t.id)) as thread_count from " . AppBase::$forums_table . " f
 					left join " . AppBase::$threads_table . " t on t.parent_id = f.id
@@ -214,8 +220,7 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public
-	function getThreadsInForum($forum_id, $offset)
+	public function getThreadsInForum($forum_id, $offset)
 	{
 		$limit_query = "LIMIT $offset," . AppBase::THREAD_PAGE_COUNT;
 
@@ -252,43 +257,37 @@ class ForumHelper
 	}
 
 
-	public
-	function getPostText($id)
+	public function getPostText($id)
 	{
 		$sql = "select text from " . AppBase::$posts_table . " where id = '{$id}'";
 		return $this->db->get_row($sql, ARRAY_A);
 	}
 
-	public
-	function lastPoster($thread_id)
+	public function lastPoster($thread_id)
 	{
 		$sql = "select u.display_name, u.ID, u.user_email from " . AppBase::$users_table . " u LEFT JOIN  " . AppBase::$posts_table . " p on u.id = p.user_id where parent_id = '{$thread_id}' order by date DESC limit 1";
 		return $this->db->get_row($sql, ARRAY_A);
 	}
 
-	public
-	function getCategory($id)
+	public function getCategory($id)
 	{
 		$sql = "select name, id from " . AppBase::$categories_table . " where id = '{$id}'";
 		return $this->db->get_row($sql, ARRAY_A);
 	}
 
-	public
-	function getForum($id)
+	public function getForum($id)
 	{
 		$sql = "select * from " . AppBase::$forums_table . " where id = '{$id}'";
 		return $this->db->get_row($sql, ARRAY_A);
 	}
 
-	public
-	function getThread($id)
+	public function getThread($id)
 	{
 		$sql = "select * from " . AppBase::$threads_table . " where id = '{$id}'";
 		return $this->db->get_row($sql, ARRAY_A);
 	}
 
-	public
-	function getPost($id)
+	public function getPost($id)
 	{
 		$sql = "select * from " . AppBase::$posts_table . " where id = '{$id}'";
 		return $this->db->get_row($sql, ARRAY_A);
@@ -298,8 +297,7 @@ class ForumHelper
 	* @param
 	* @return
 	*/
-	public
-	function getIcon($thread)
+	public function getIcon($thread)
 	{
 		switch ($thread["is_question"]) {
 			case "1":
