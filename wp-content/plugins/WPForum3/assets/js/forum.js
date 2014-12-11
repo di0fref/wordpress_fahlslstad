@@ -1,5 +1,8 @@
 jQuery(function ($) {
 
+
+	$("#bbcode").markItUp(bbcodeSettings);
+
 	$("#forum-form-new-thread").validate();
 	$("#forum-form-new-post").validate();
 

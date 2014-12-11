@@ -179,16 +179,23 @@ class ForumHelper
 			$post["avatar"] = get_avatar($post["user_id"], 65);
 			$post["user"] = $this->getUserDataFiltered($post["user_id"]);
 
-			if (!in_array($thread["status"], array("closed")) and !$thread["is_solved"]) {
+			if (!in_array($thread["status"], array("closed")) and !$thread["is_solved"] and $thread["user_id"] == get_current_user_id()) {
 				$post["post_links"] = array(
+					"edit" => array(
+						"href" => "#",
+						"text" => "Edit",
+					),
+					"solve_post" => array(
+						"href" => "<a data-nonce='$nonce' data-post-id='".$post["id"]."' data-thread-id='$record' class='marksolved' href='javascript:void(0)'>Mark topic solved by this post</a>",
+					),
 					"quote" => array(
 						"href" => ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $record, array(AppBase::FORUM_QUOTE, $post["id"])),
 						"text" => "Reply With Quote",
 					),
-					"solve_post" => array(
-						"href" => "<a data-nonce='$nonce' data-post-id='".$post["id"]."' data-thread-id='$record' class='marksolved' href='javascript:void(0)'>Mark as solved using this post</a>",
-					)
 				);
+				if(!$thread["is_question"]){
+					unset($post["post_links"]["solve_post"]);
+				}
 			}
 		}
 

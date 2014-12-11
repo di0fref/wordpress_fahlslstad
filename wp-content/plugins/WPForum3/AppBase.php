@@ -296,11 +296,13 @@ class AppBase
 	{
 		wp_register_style('wpforum_styles', plugins_url('assets/styles/style.css', __FILE__), array(), '', 'all');
 		wp_register_style('jquery_ui_styles', plugins_url('assets/js/jquery-ui/jquery-ui.min.css', __FILE__), array(), '', 'all');
-		wp_register_style('wpforum_editor_styles', plugins_url('assets/js/markitup/sets/bbcode/style.css', __FILE__), array(), '', 'all');
+		wp_register_style('wpforum_editor_bbcode_styles', plugins_url('assets/js/markitup/sets/bbcode/style.css', __FILE__), array(), '', 'all');
+		wp_register_style('wpforum_editor_default_styles', plugins_url('assets/js/markitup/skins/markitup/style.css', __FILE__), array(), '', 'all');
 
 		wp_enqueue_style('wpforum_styles');
 		wp_enqueue_style('jquery_ui_styles');
-		wp_enqueue_style('wpforum_editor_styles');
+		wp_enqueue_style('wpforum_editor_bbcode_styles');
+		wp_enqueue_style('wpforum_editor_default_styles');
 
 		wp_register_script('jquery_ui_js', plugins_url('assets/js/jquery-ui/jquery-ui.min.js', __FILE__), array("jquery"), '', false);
 		wp_register_script('wpforum_script', plugins_url('assets/js/forum.js', __FILE__), array("jquery"), '', false);
@@ -316,10 +318,6 @@ class AppBase
 
 		wp_localize_script('wpforum_script', 'forumAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
 
-
-		/* Bootstrap */
-		wp_register_script('bootstap_js', plugins_url('assets/js/bootstrap/js/bootstrap.min.js', __FILE__), array("jquery"), '', false);
-		wp_enqueue_script('bootstap_js');
 	}
 
 	function processForm()

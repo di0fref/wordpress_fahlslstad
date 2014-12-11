@@ -10,10 +10,12 @@
 
 {if $data.posts}
 	{foreach from=$data.posts item=post name=posts_array}
-		<div class="forum-post-wrapper {if $data.solved_post_id eq $post.id}forum-solved-post{/if}" id="post_{$post.nr}" >
+		<div class="forum-post-wrapper {if $data.solved_post_id eq $post.id}forum-solved-post{/if}"
+			 id="post_{$post.nr}">
 			<div class="bold forum-post-top"><!--Posted: -->{$post.date|timesince}<span
 						class="post-id-meta small">#{$post.nr}</span>
-				{if $data.solved_post_id eq $post.id}<span class="solved-post-message bold">(Topic is solved by this post)</span>{/if}</div>
+				{if $data.solved_post_id eq $post.id}<span class="solved-post-message bold">(Topic is solved by this post)</span>{/if}
+			</div>
 			<div class="forum-left">
 				<figure class="forum-figure">
 					{$post.avatar}
@@ -39,7 +41,7 @@
 				{/if}
 			</div>
 			<div class="forum-post-links">
-				<ul>
+				<!--<ul>
 					{foreach from =$post.post_links item=link key=name}
 						<li class="small">
 							{if $link.text}
@@ -49,7 +51,15 @@
 							{/if}
 						</li>
 					{/foreach}
-				</ul>
+				</ul>-->
+				{foreach from =$post.post_links item=link name=links}
+					{if $link.text}
+						<a href="{$link.href}">{$link.text}</a>
+					{else}
+						{$link.href}
+					{/if}
+					{if $smarty.foreach.links.last != true} | {/if}
+				{/foreach}
 			</div>
 		</div>
 	{/foreach}
