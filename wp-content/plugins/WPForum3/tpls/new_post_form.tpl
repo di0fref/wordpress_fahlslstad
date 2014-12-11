@@ -5,9 +5,7 @@
 	<table class="forum-table" border="0">
 		<tr>
 			<td>
-				<textarea style="width:500px; height:200px" name="text" id="bbcode" required>
-{if $quote_data}[quote]{$quote_data.quote_text}[b]{$quote_data.user->display_name}[/b] @ {$quote_data.post.date|date_format:$config.date_format}
-{$quote_data.post.text}[/quote]{/if}</textarea></td>
+				<textarea style="width:500px; height:200px" name="text" id="bbcode" required>{$quote_text}</textarea></td>
 		</tr>
 		<tr>
 			<td>

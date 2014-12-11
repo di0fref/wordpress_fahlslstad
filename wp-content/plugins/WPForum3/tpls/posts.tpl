@@ -1,18 +1,19 @@
 <div class="forum-trail">{$trail}</div>
-<!--<div class="forum-header-wrapper">-->
 <div class="forum-title" id="left">{$data.prefix}{$data.header}</div>
-	<div class="forum-buttons" id="right">
-		<ul>
-			{foreach from=$buttons item=button key=name}
-				<li>{$button}</li>
-			{/foreach}
-		</ul>
-	</div>
+<div class="forum-buttons" id="right">
+	<ul>
+		{foreach from=$buttons item=button key=name}
+			<li>{$button}</li>
+		{/foreach}
+	</ul>
+</div>
 
-<!--</div>-->
 {if $data.posts}
 	{foreach from=$data.posts item=post name=posts_array}
-		<div class="forum-post-wrapper" id="post_{$post.nr}">
+		<div class="forum-post-wrapper {if $data.solved_post_id eq $post.id}forum-solved-post{/if}" id="post_{$post.nr}" >
+			<div class="bold forum-post-top"><!--Posted: -->{$post.date|timesince}<span
+						class="post-id-meta small">#{$post.nr}</span>
+				{if $data.solved_post_id eq $post.id}<span class="solved-post-message bold">(Topic is solved by this post)</span>{/if}</div>
 			<div class="forum-left">
 				<figure class="forum-figure">
 					{$post.avatar}
@@ -25,25 +26,30 @@
 			<div class="forum-right {if $smarty.foreach.posts_array.first}forum-post-first{/if}">
 				<div class="forum-post-meta">
 					<!--<span class="post-author bold">{if $post.user->display_name eq ""}Guest{else}{$post.user->display_name}{/if}</span><br>-->
-					<span class="small post-date">Posted: {$post.date|date_format:$config.date_format}</span><span class="post-id-meta">#{$post.nr}</span>
+					<span class="small post-date bold">Re: {$data.header}</span>
+					<!--<span class="post-id-meta">#{$post.nr}</span>-->
 				</div>
 				<div class="forum-post-text">
-					{$post.text|nl2br}
+					{$post.text}
 				</div>
 				{if $post.user->meta.description}
 					<div class="forum-post-signature border-top">
 						{$post.user->meta.description|nl2br}
 					</div>
 				{/if}
-				<div class="forum-post-links">
-					<ul>
-						{foreach from =$post.post_links item=link key=name}
-							<li class="small">
+			</div>
+			<div class="forum-post-links">
+				<ul>
+					{foreach from =$post.post_links item=link key=name}
+						<li class="small">
+							{if $link.text}
 								<a href="{$link.href}">{$link.text}</a>
-							</li>
-						{/foreach}
-					</ul>
-				</div>
+							{else}
+								{$link.href}
+							{/if}
+						</li>
+					{/foreach}
+				</ul>
 			</div>
 		</div>
 	{/foreach}

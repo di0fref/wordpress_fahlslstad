@@ -32,6 +32,10 @@ class ForumView
 
 	function getNewThreadView()
 	{
+		$forum = $this->helper->getForum($_REQUEST["record"]);
+		if (!$forum) {
+			self::_exit();
+		}
 		$this->smarty->assign("record", $_REQUEST["record"]);
 		$this->smarty->assign("nonce", wp_create_nonce("wpforum_insert_nonce"));
 		return $this->smarty->fetch($this->template_dir . "/new_thread_form.tpl");
@@ -39,18 +43,18 @@ class ForumView
 
 	function getNewPostView()
 	{
+		/* Make sure the thread exist */
+		$thread = $this->helper->getThread($_REQUEST["record"]);
+		if (!$thread) {
+			self::_exit();
+		}
 		if (isset($_REQUEST[AppBase::FORUM_QUOTE])) {
 			$post = $this->helper->getPost($_REQUEST[AppBase::FORUM_QUOTE]);
-			$quote_data = array(
-				"post" => $post,
-				"user" => $this->helper->getUserDataFiltered($post["user_id"]),
-				//"link" => "<a href='#".$post["nr"]."'>#".$post["nr"]."</a>",
-				//"link" => "[url]#post_".$post["nr"]."[/url]",
-				"quote_text" => "Originally posted by: ",
-			);
-			$this->smarty->assign("quote_data", $quote_data);
+			$user = $this->helper->getUserDataFiltered($post["user_id"]);
+			$text = "[quote name=" . $user->display_name . " date=" . date("Y-m-d H:i") . "]" . $post["text"] . "[/quote]";
+			$this->smarty->assign("quote_text", $text);
 		}
-		$thread = $this->helper->getThread($_REQUEST["record"]);
+
 		$this->smarty->assign("record", $_REQUEST["record"]);
 		$this->smarty->assign("thread_name", $thread["subject"]);
 		$this->smarty->assign("nonce", wp_create_nonce("wpforum_insert_nonce"));
@@ -73,7 +77,7 @@ class ForumView
 				),
 				AppBase::THREAD_VIEW_ACTION => array(
 					"new_post" => "<a data-thread-id='" . $this->record . "' class='forum-button forum-reply-button' href='" . ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $this->record) . "'>Reply</a>",
-					"subscribe_rss" => "<a class='forum-button subscribe_rss' href='" . ForumHelper::getLink(AppBase::RSS_POST_ACTION, $this->record) . "'>RSS Feed</a>",
+					//"subscribe_rss" => "<a class='forum-button subscribe_rss' href='" . ForumHelper::getLink(AppBase::RSS_POST_ACTION, $this->record) . "'>RSS Feed</a>",
 					//"subscribe_email" => "<a class='forum-button subscribe_email' href='" . ForumHelper::getLink(AppBase::EMAIL_POST_ACTION, $this->record) . "'>Email Subscription</a>"
 				),
 			);
@@ -83,7 +87,7 @@ class ForumView
 					$thread = $this->helper->getThread($this->record);
 					if ($current_user_id == $thread["user_id"]) {
 						if ($thread["is_question"] && !$thread["is_solved"]) {
-							$buttons[$this->action]["mark_solved"] = "<a data-nonce='$nonce' data-thread-id='$this->record' id='marksolved' href='" . ForumHelper::getLink(AppBase::MARK_SOLVED_ACTION, $this->record) . "'>Mark solved</a>";
+							$buttons[$this->action]["mark_solved"] = "<a data-nonce='$nonce' data-thread-id='$this->record' class='marksolved' href='javascript:void(0)'>Mark as solved</a>";
 						}
 						if ($thread["is_solved"] or $thread["status"] == "closed") {
 							unset($buttons[$this->action]["new_post"]);
@@ -109,11 +113,12 @@ class ForumView
 	{
 		$config = array(
 			"date_format" => get_option(AppBase::OPTION_DATE_FORMAT),
+			"images_dir" => plugins_url("assets/images", __FILE__),
 		);
-
 		$this->smarty->assign("border", AppBase::$border);
 		$this->smarty->assign("forum_table_class", "forum-table");
 		$this->smarty->assign("config", $config);
+
 	}
 
 	/*
@@ -122,7 +127,11 @@ class ForumView
 	*/
 	public function getForumView()
 	{
-		$this->smarty->assign("data", $this->helper->getThreadsInForum($this->record, $this->offset));
+		$threads = $this->helper->getThreadsInForum($this->record, $this->offset);
+		if (!$threads) {
+			$this->_exit();
+		}
+		$this->smarty->assign("data", $threads);
 		return $this->smarty->fetch($this->template_dir . "/threads.tpl");
 	}
 
@@ -133,9 +142,27 @@ class ForumView
 	*/
 	public function getTopicView()
 	{
+		$posts = $this->helper->getPostsInThread($this->record, $this->offset);
+		if (!$posts) {
+			self::_exit();
+		}
 		$this->helper->updateThreadViewCount($this->record);
-		$this->smarty->assign("data", $this->helper->getPostsInThread($this->record, $this->offset));
+		$this->smarty->assign("data", $posts);
 		return $this->smarty->fetch($this->template_dir . "/posts.tpl");
+	}
+
+	public static function _exit($msg = "")
+	{
+		wp_die("
+			<h2>Oops...</h2>
+			<p>The requested forum resource was not found.<br>
+			Please take a look at the forum main page or do a search</p>
+
+			<ul>
+				<li><a href='" . get_permalink() . "'>Forum main page</a></li>
+				<li><a href='#'>Search the forums</a></li>
+			</ul>"
+		);
 	}
 
 	/*
@@ -145,7 +172,11 @@ class ForumView
 	*/
 	public function getMainView()
 	{
-		$this->smarty->assign("data", $this->helper->getCategories());
+		$cats = $this->helper->getCategories();
+		if (!$cats) {
+			self::_exit();
+		}
+		$this->smarty->assign("data", $cats);
 		return $this->smarty->fetch($this->template_dir . "/main.tpl");
 	}
 }

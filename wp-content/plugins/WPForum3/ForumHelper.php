@@ -1,7 +1,8 @@
 <?php
 
 require_once(ABSPATH . '/wp-load.php');
-require_once("assets/bbcode.php");
+//require_once("assets/bbcode.php");
+require_once("assets/nbbc/nbbc.php");
 
 /*
 * Class:
@@ -12,6 +13,8 @@ class ForumHelper
 {
 	public $db;
 	protected static $_instance;
+
+	protected $bb_parser;
 
 	public static function getInstance()
 	{
@@ -25,6 +28,8 @@ class ForumHelper
 	{
 		global $wpdb;
 		$this->db = $wpdb;
+		$this->bb_parser = new BBCode();
+		$this->bb_parser->SetSmileyURL(plugins_url("assets/nbbc/smileys", __FILE__));
 	}
 
 	public static function input_filter($string)
@@ -33,10 +38,14 @@ class ForumHelper
 		return strip_tags($wpdb->escape($string));
 	}
 
-	public static function markSolved($record)
+	public static function markSolved($record, $post_id = "")
 	{
 		global $wpdb;
-		$sql = "UPDATE " . AppBase::$threads_table . " SET is_solved = '1' WHERE id = '$record'";
+		$additional_sql = "";
+		if($post_id){
+			$additional_sql = " ,solved_post_id = '$post_id'";
+		}
+		$sql = "UPDATE " . AppBase::$threads_table . " SET is_solved = '1' $additional_sql WHERE id = '$record'";
 		$result = $wpdb->query($sql);
 		return $result;
 	}
@@ -144,6 +153,11 @@ class ForumHelper
 	public function updateThreadViewCount($thread_id)
 	{
 		$thread = $this->getThread($thread_id);
+
+		if ($thread["user_id"] != get_current_user_id()) {
+			$sql = "update " . AppBase::$threads_table . " set views = views+1 where id ='$thread_id'";
+			$this->db->query($sql);
+		}
 	}
 
 	/*
@@ -153,9 +167,12 @@ class ForumHelper
 	public function getPostsInThread($record, $offset)
 	{
 		$limit_query = "LIMIT $offset," . AppBase::POST_PAGE_COUNT;
-
+		$nonce = wp_create_nonce("wpforum_ajax_nonce");
 		$sql = "SELECT p.*, t.subject as thread_subject FROM " . AppBase::$posts_table . " p left join " . AppBase::$threads_table . " t on t.id = p.parent_id WHERE p.parent_id='$record' order by date $limit_query";
 		$posts["posts"] = $this->db->get_results($sql, ARRAY_A);
+		if (!$posts["posts"]) {
+			return false;
+		}
 		$thread = $this->getThread($record);
 		foreach ($posts["posts"] as &$post) {
 			$post["text"] = $this->outPutFilter($post["text"]);
@@ -168,6 +185,9 @@ class ForumHelper
 						"href" => ForumHelper::getLink(AppBase::NEW_POST_VIEW_ACTION, $record, array(AppBase::FORUM_QUOTE, $post["id"])),
 						"text" => "Reply With Quote",
 					),
+					"solve_post" => array(
+						"href" => "<a data-nonce='$nonce' data-post-id='".$post["id"]."' data-thread-id='$record' class='marksolved' href='javascript:void(0)'>Mark as solved using this post</a>",
+					)
 				);
 			}
 		}
@@ -175,12 +195,16 @@ class ForumHelper
 		$subject = $thread["subject"];
 		$posts["header"] = $subject;
 		$posts["prefix"] = $this->getThreadPrefix($thread);
+		if(!empty($thread["solved_post_id"])){
+			$posts["solved_post_id"] = $thread["solved_post_id"];
+		}
+
 		return $posts;
 	}
 
 	function outPutFilter($string)
 	{
-		return stripslashes(PP_BBCode($string));
+		return stripslashes($this->bb_parser->Parse($string));
 	}
 
 	/*
@@ -192,6 +216,9 @@ class ForumHelper
 		$sql = "SELECT * FROM " . AppBase::$categories_table . " order by name";
 		$categories = $this->db->get_results($sql, ARRAY_A);
 
+		if (!$categories) {
+			return false;
+		}
 		foreach ($categories as &$category) {
 			foreach ($this->getForumsInCategory($category["id"]) as $forum) {
 				$forum["href"] = self::getLink(AppBase::FORUM_VIEW_ACTION, $forum["id"]);
@@ -214,6 +241,9 @@ class ForumHelper
 						where f.parent_id = '{$category_id}'
 				group by f.id;";
 		$result = $this->db->get_results($sql, ARRAY_A);
+		if (!$result) {
+			return false;
+		}
 		return $result;
 	}
 
@@ -225,15 +255,18 @@ class ForumHelper
 	{
 		$limit_query = "LIMIT $offset," . AppBase::THREAD_PAGE_COUNT;
 
-		$sql = "select t.*, count(distinct(p.id)) as post_count, max(p.date) as last_post from " . AppBase::$threads_table . " t
+		$sql = "select t.*, count(distinct(p.id))-1 as post_replies, max(p.date) as last_post from " . AppBase::$threads_table . " t
 			left join " . AppBase::$posts_table . " p on t.id = p.parent_id
 				where t.parent_id = '$forum_id'
 			group by t.id order by (status = 'sticky') DESC, last_post DESC $limit_query ";
 		$threads = $this->db->get_results($sql, ARRAY_A);
+		if (!$threads) {
+			return false;
+		}
 
 		foreach ($threads as &$thread) {
 			$thread["href"] = self::getLink(AppBase::THREAD_VIEW_ACTION, $thread["id"]);
-			$thread["icon"] = self::getIcon($thread);
+			$thread["icon"] = self::getPng($thread);
 			$thread["user"] = $this->getUserDataFiltered($thread["user_id"]);
 			$thread["last_poster"] = $this->lastPoster($thread["id"]);
 			$thread["last_poster"]["avatar"] = get_avatar($thread["last_poster"]["user_email"], 22);
@@ -295,6 +328,33 @@ class ForumHelper
 	}
 
 	/*
+		* @param
+		* @return
+		*/
+	public function getPng($thread)
+	{
+		switch ($thread["is_question"]) {
+			case "1":
+				if ($thread["is_solved"]) {
+					return "solved";
+				} else {
+					return "question";
+				}
+				break;
+			case "0":
+				if ($thread["status"] == "sticky")
+					return "sticky";
+				if ($thread["status"] == "open")
+					return "open";
+				if ($thread["status"] == "closed")
+					return "closed";
+				break;
+			default:
+				return "open";
+		}
+	}
+
+	/*
 	* @param
 	* @return
 	*/
@@ -352,7 +412,7 @@ class ForumHelper
 	{
 		global $wpdb;
 		$sql = "SELECT max(nr) from " . AppBase::$posts_table . " WHERE parent_id = '$thread_id'";
-		return $wpdb->get_var($sql)+1;
+		return $wpdb->get_var($sql) + 1;
 
 	}
 }
